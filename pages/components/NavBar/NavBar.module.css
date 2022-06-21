@@ -11,10 +11,18 @@
   overflow: hidden;
 }
 
+.thumbButton {
+  scale: 1.3 !important;
+}
+
+.card {
+  width: 100vw;
+}
+
 .navbar {
   position: sticky;
   bottom: 0;
-  overflow: hidden;
+
   background-color: white;
   align-items: center !important;
 }

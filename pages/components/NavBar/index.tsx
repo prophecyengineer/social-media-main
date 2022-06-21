@@ -90,36 +90,38 @@ export default function NavBar(props) {
         />
         {props.children}
         <Layout className={styles.navbar}>
-          <Card>
-            <ButtonGroup size="large" aria-label="Operate button group">
-              <Link href="/home">
-                <Button size="large">
-                  <IconHome size="large" />
-                </Button>
-              </Link>
-              <Link href="/explore">
-                <Button size="large">
-                  <IconGlobe size="large" />
-                </Button>
-              </Link>
+          <ButtonGroup
+            className="thumbButton"
+            size="large"
+            aria-label="Operate button group"
+          >
+            <Link href="/home">
+              <Button size="large">
+                <IconHome size="large" />
+              </Button>
+            </Link>
+            <Link href="/explore">
+              <Button size="large">
+                <IconGlobe size="large" />
+              </Button>
+            </Link>
 
-              <Link href="/profile">
-                <Button size="large">
-                  <IconUserCircle size="large" />
-                </Button>
-              </Link>
-              <Link href="/notification">
-                <Button size="large">
-                  <IconBell size="large" />
-                </Button>
-              </Link>
-              <Link href="/">
-                <Button size="large">
-                  <IconWrench size="large" />
-                </Button>
-              </Link>
-            </ButtonGroup>
-          </Card>
+            <Link href="/profile">
+              <Button size="large">
+                <IconUserCircle size="large" />
+              </Button>
+            </Link>
+            <Link href="/notification">
+              <Button size="large">
+                <IconBell size="large" />
+              </Button>
+            </Link>
+            <Link href="/">
+              <Button size="large">
+                <IconWrench size="large" />
+              </Button>
+            </Link>
+          </ButtonGroup>
         </Layout>
       </Layout>
     </>
