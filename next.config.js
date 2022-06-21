@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
+const semi = require("@douyinfe/semi-next").default({
+  /* the extension options */
+});
 
-module.exports = nextConfig
+const nextConfig = semi({
+  reactStrictMode: false,
+  images: {
+    domains: ["img.icons8.com", "unsplash.com", "placekitten.com"],
+  },
+});
+
+module.exports = nextConfig;

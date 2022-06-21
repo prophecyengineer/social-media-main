@@ -1,3 +1,10 @@
+@import "~@douyinfe/semi-ui/dist/css/semi.min.css";
+@import "~@semi-bot/semi-theme-nyx-c/semi.min.css";
+
+.col-content {
+  background-color: rgb(213, 192, 192);
+}
+
 html,
 body {
   padding: 0;
