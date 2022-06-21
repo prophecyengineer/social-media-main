@@ -1,23 +1,23 @@
-// import {
-//   Layout,
-//   Nav,
-//   Button,
-//   Breadcrumb,
-//   Skeleton,
-//   Avatar,
-//   Col,
-//   Row,
-// } from "@douyinfe/semi-ui";
-// import {
-//   IconSemiLogo,
-//   IconBell,
-//   IconHelpCircle,
-//   IconBytedanceLogo,
-//   IconHome,
-//   IconLive,
-//   IconSetting,
-//   IconHistogram,
-// } from "@douyinfe/semi-icons";
+import {
+  Layout,
+  Nav,
+  Button,
+  Breadcrumb,
+  Skeleton,
+  Avatar,
+  Col,
+  Row,
+} from "@douyinfe/semi-ui";
+import {
+  IconSemiLogo,
+  IconBell,
+  IconHelpCircle,
+  IconBytedanceLogo,
+  IconHome,
+  IconLive,
+  IconSetting,
+  IconHistogram,
+} from "@douyinfe/semi-icons";
 
 // import NavBar from "../NavBar";
 
@@ -167,8 +167,9 @@ export default function Wrapper(props) {
   ) {
     return (
       <>
-        <NavBar />
-        {props.children}
+        <NavBar>
+          <Layout>{props.children}</Layout>
+        </NavBar>
       </>
     );
   } else {

@@ -5,9 +5,16 @@
   width: 100%;
 }
 
+.Nav {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
 .navbar {
   position: sticky;
   bottom: 0;
   overflow: hidden;
-  align-items: center;
+  background-color: white;
+  align-items: center !important;
 }
