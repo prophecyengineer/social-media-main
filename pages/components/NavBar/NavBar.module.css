@@ -1,4 +1,4 @@
-.header {
+.top {
   position: sticky;
   top: 0;
   overflow: hidden;
@@ -11,18 +11,11 @@
   overflow: hidden;
 }
 
-.thumbButton {
-  scale: 1.3 !important;
-}
-
 .card {
   width: 100vw;
 }
 
-.navbar {
+.thumb {
   position: sticky;
   bottom: 0;
-
-  background-color: white;
-  align-items: center !important;
 }

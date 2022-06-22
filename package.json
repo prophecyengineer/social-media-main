@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@douyinfe/semi-ui": "^2.13.0",
     "@nextui-org/react": "^1.0.0-beta.9",
     "@prisma/client": "^3.15.2",
     "@semi-bot/semi-theme-nyx-c": "^1.0.6",
+    "antd-mobile": "^5.15.1",
     "bcrypt": "^5.0.1",
     "next": "12.1.6",
     "next-auth": "^4.5.0",
@@ -22,12 +22,12 @@
     "react-responsive": "^9.0.0-beta.10"
   },
   "devDependencies": {
-    "@douyinfe/semi-next": "^2.13.0",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
     "eslint": "8.18.0",
     "eslint-config-next": "12.1.6",
+    "next-transpile-modules": "^9.0.0",
     "typescript": "4.7.4"
   }
 }

@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
-const semi = require("@douyinfe/semi-next").default({
-  /* the extension options */
-});
+const withTM = require("next-transpile-modules")(["antd-mobile"]);
 
-const nextConfig = semi({
-  reactStrictMode: false,
+const nextConfig = withTM({
+  reactStrictMode: true,
   images: {
     domains: ["img.icons8.com", "unsplash.com", "placekitten.com"],
   },

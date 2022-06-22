@@ -20,6 +20,7 @@ import {
 import stream from "getstream";
 import { signOut, useSession } from "next-auth/react";
 import { Button, Container, Grid } from "@nextui-org/react";
+import Nav from "../components/NavBar";
 
 const Home = () => {
   const session = useSession();
@@ -43,90 +44,92 @@ const Home = () => {
   //   );
   return (
     <>
-      <main className={styles.main}>
-        <h1 className={styles.title}> Home </h1>
-        <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
-          {/* <StatusUpdateForm/> */}
-          <FlatFeed
-            notify
-            feedGroup="home"
-            Activity={(props) => {
-              console.log("props", props);
-              let activity;
-              if (props.activity?.actor?.data) {
-                activity = {
-                  activity: {
-                    //give
-                    ...props.activity,
-                    actor: {
-                      data: {
-                        name: props.activity.actor.id,
+      <Nav>
+        <main className={styles.main}>
+          <h1 className={styles.title}> Home </h1>
+          <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
+            {/* <StatusUpdateForm/> */}
+            <FlatFeed
+              notify
+              feedGroup="home"
+              Activity={(props) => {
+                console.log("props", props);
+                let activity;
+                if (props.activity?.actor?.data) {
+                  activity = {
+                    activity: {
+                      //give
+                      ...props.activity,
+                      actor: {
+                        data: {
+                          name: props.activity.actor.id,
+                        },
                       },
                     },
-                  },
-                } as ActivityProps;
-              }
+                  } as ActivityProps;
+                }
 
-              return (
-                <Activity
-                  {...props}
-                  // data={{ name: props.activity.actor.data.id }}
-                  activity={activity?.activity || props.activity}
-                  HeaderRight={() => (
-                    <Grid>
-                      <Button
-                        size="xs"
-                        onClick={() => {
-                          const currentUser = client.feed(
-                            "home",
-                            username,
-                            userToken
-                          );
-                          currentUser.follow(
-                            "user",
-                            props.activity.actor.id,
-                            userToken
-                          );
-                        }}
-                      >
-                        follow {props.activity.actor.id}
-                      </Button>
-                      <Button
-                        size="xs"
-                        onClick={() => {
-                          const currentUser = client.feed(
-                            "home",
-                            username,
-                            userToken
-                          );
-                          currentUser.unfollow(
-                            "user",
-                            props.activity.actor.id,
-                            userToken
-                          );
-                        }}
-                      >
-                        unfollow {props.activity.actor.id}
-                      </Button>
-                    </Grid>
-                  )}
-                  Footer={() => (
-                    <div style={{ padding: "8px 16px" }}>
-                      <LikeButton {...props} />
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
-                      <CommentList activityId={props.activity.id} />
-                    </div>
-                  )}
-                />
-              );
-            }}
-          />
-        </StreamApp>
-        ;
-      </main>
+                return (
+                  <Activity
+                    {...props}
+                    // data={{ name: props.activity.actor.data.id }}
+                    activity={activity?.activity || props.activity}
+                    HeaderRight={() => (
+                      <Grid>
+                        <Button
+                          size="xs"
+                          onClick={() => {
+                            const currentUser = client.feed(
+                              "home",
+                              username,
+                              userToken
+                            );
+                            currentUser.follow(
+                              "user",
+                              props.activity.actor.id,
+                              userToken
+                            );
+                          }}
+                        >
+                          follow {props.activity.actor.id}
+                        </Button>
+                        <Button
+                          size="xs"
+                          onClick={() => {
+                            const currentUser = client.feed(
+                              "home",
+                              username,
+                              userToken
+                            );
+                            currentUser.unfollow(
+                              "user",
+                              props.activity.actor.id,
+                              userToken
+                            );
+                          }}
+                        >
+                          unfollow {props.activity.actor.id}
+                        </Button>
+                      </Grid>
+                    )}
+                    Footer={() => (
+                      <div style={{ padding: "8px 16px" }}>
+                        <LikeButton {...props} />
+                        <CommentField
+                          activity={props.activity}
+                          onAddReaction={props.onAddReaction}
+                        />
+                        <CommentList activityId={props.activity.id} />
+                      </div>
+                    )}
+                  />
+                );
+              }}
+            />
+          </StreamApp>
+          ;
+        </main>
+      </NavBar>
     </>
   );
 };

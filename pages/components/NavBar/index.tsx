@@ -1,39 +1,35 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Link from "next/link";
-import {
-  Layout,
-  Nav,
-  Button,
-  Breadcrumb,
-  Skeleton,
-  Avatar,
-  Col,
-  Select,
-  Dropdown,
-  Row,
-  Card,
-  ButtonGroup,
-} from "@douyinfe/semi-ui";
 import { useRouter } from "next/router";
-
 import {
-  IconSemiLogo,
-  IconHelpCircle,
-  IconUserCircle,
-  IconHome,
-  IconGlobe,
-  IconWrench,
-  IconBell,
-  IconSetting,
-  IconHistogram,
-} from "@douyinfe/semi-icons";
+  AppOutline,
+  MessageOutline,
+  UnorderedListOutline,
+  UserOutline,
+  MoreOutline,
+  FrownOutline,
+} from "antd-mobile-icons";
 import styles from "./Navbar.module.css";
 import { signOut, useSession } from "next-auth/react";
+import {
+  NavBar,
+  TabBar,
+  Toast,
+  Space,
+  Avatar,
+  Grid,
+  Button,
+  Card,
+} from "antd-mobile";
+import {
+  LocationOutline,
+  GlobalOutline,
+  BellOutline,
+  UserCircleOutline,
+} from "antd-mobile-icons";
 
-const { Header, Footer, Sider, Content } = Layout;
-
-export default function NavBar(props) {
+export default function Nav(props) {
   const session = useSession();
 
   const name = session.data?.user?.name;
@@ -45,6 +41,29 @@ export default function NavBar(props) {
     setMounted(true);
   }, []);
 
+  const left = (
+    <>
+      <Grid columns={2}>
+        <Avatar style={{ "--size": "32px" }} src={image}></Avatar>
+      </Grid>
+    </>
+  );
+
+  const right = (
+    <div style={{ fontSize: 24 }}>
+      <Space style={{ "--gap": "16px" }}>
+        <FrownOutline onClick={signOut} />
+        <MoreOutline />
+      </Space>
+    </div>
+  );
+
+  const back = () =>
+    Toast.show({
+      content: "Go back?",
+      duration: 1000,
+    });
+
   return (
     <>
       {mounted && (
@@ -54,76 +73,49 @@ export default function NavBar(props) {
           </Desktop>
         </div>
       )}
-      <Layout>
-        <Nav
-          className={styles.Nav}
-          mode={"horizontal"}
-          onSelect={(key) => console.log(key)}
-          header={{
-            logo: (
-              <img src="https://sf6-cdn-tos.douyinstatic.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/root-web-sites/webcast_logo.svg" />
-            ),
-            text: "audit.law",
-          }}
-          footer={
-            <>
-              <Dropdown
-                position="bottomRight"
-                render={
-                  <Dropdown.Menu>
-                    <Dropdown.Item>
-                      <Button onClick={signOut}>Sign out</Button>
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                }
-              >
-                <span>{name}</span>
-                <Avatar
-                  size="small"
-                  color="light-blue"
-                  style={{ margin: 4, marginLeft: 6 }}
-                  src={image}
-                ></Avatar>
-              </Dropdown>
-            </>
-          }
-        />
-        {props.children}
-        <Layout className={styles.navbar}>
-          <ButtonGroup
-            className="thumbButton"
-            size="large"
-            aria-label="Operate button group"
-          >
-            <Link href="/home">
-              <Button size="large">
-                <IconHome size="large" />
-              </Button>
-            </Link>
-            <Link href="/explore">
-              <Button size="large">
-                <IconGlobe size="large" />
-              </Button>
-            </Link>
 
-            <Link href="/profile">
-              <Button size="large">
-                <IconUserCircle size="large" />
-              </Button>
-            </Link>
-            <Link href="/notification">
-              <Button size="large">
-                <IconBell size="large" />
-              </Button>
-            </Link>
-            <Link href="/">
-              <Button size="large">
-                <IconWrench size="large" />
-              </Button>
-            </Link>
-          </ButtonGroup>
-        </Layout>
-      </Layout>
+      <div className={styles.top}>
+        <NavBar right={right} back={left} backArrow={false}>
+          audit.law
+        </NavBar>
+      </div>
+
+      {props.children}
+
+      <TabBar className={styles.thumb} aria-label="Operate button group">
+        <TabBar.Item
+          key="/home"
+          title="home"
+          icon={<LocationOutline />}
+          badge={5}
+        />
+
+        <TabBar.Item key="/explore" title="explore" icon={<GlobalOutline />} />
+        <TabBar.Item
+          key="/profile"
+          title="profile"
+          icon={<UserCircleOutline />}
+        />
+        <TabBar.Item
+          key="/notification"
+          title="notification"
+          icon={<BellOutline />}
+          badge={99}
+        />
+        <Link href="/explore">
+          <Button>Explore</Button>
+        </Link>
+
+        <Link href="/profile">
+          <Button>Profile</Button>
+        </Link>
+        <Link href="/notification">
+          <Button>Notification</Button>
+        </Link>
+        <Link href="/">
+          <Button>Setting</Button>
+        </Link>
+      </TabBar>
     </>
   );
 }

@@ -4,17 +4,15 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
-  Layout,
-  Nav,
-  Breadcrumb,
-  Skeleton,
-  Avatar,
-  Typography,
+  Form,
+  Input,
+  Button,
+  Dialog,
   Space,
-  Col,
-  Row,
-} from "@douyinfe/semi-ui";
-import { Button, Input, Grid, Card } from "@nextui-org/react";
+  Card,
+  Grid,
+  Divider,
+} from "antd-mobile";
 const axios = require("axios").default;
 
 export default function Register(props) {
@@ -25,17 +23,28 @@ export default function Register(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const registerUser = async (event) => {
-    event.preventDefault();
+  const handleNameChange = (value) => {
+    setName(value);
+  };
+  const handleUsernameChange = (value) => {
+    setUsername(value);
+  };
+  const handleEmailChange = (value) => {
+    setEmail(value);
+  };
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+  };
 
-    const data = {
-      name: name,
-      username: username,
-      email: email,
-      password: password,
-    };
+  const onFinish = async (values) => {
+    // const data = {
+    //   name: name,
+    //   username: username,
+    //   email: email,
+    //   password: password,
+    // };
 
-    await axios.post("/api/register", data);
+    await axios.post("/api/register", values);
     signIn("credentials", {
       username,
       password,
@@ -52,61 +61,73 @@ export default function Register(props) {
 
   return (
     <>
-      <Card variant="bordered">
-        <Card.Header>
-          <Typography>Register</Typography>
-        </Card.Header>
-        <Card.Body>
-          <form onSubmit={registerUser}>
-            <Grid alignItems="center">
-              <Input
-                bordered
-                label="Your Name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <Space />
+      <Card>
+        <Form
+          name="form"
+          onFinish={onFinish}
+          footer={
+            <Button block type="submit" color="primary" size="large">
+              Submit
+            </Button>
+          }
+        >
+          <Form.Header>Register</Form.Header>
 
-              <Input
-                bordered
-                label="username"
-                labelLeft="audit.law/"
-                placeholder="lottie"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <Space />
+          <Form.Item
+            rules={[{ required: true }]}
+            name="name"
+            label="name"
+            help="please type your name : John Doe "
+          >
+            <Input
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              placeholder="name"
+            />
+          </Form.Item>
+          <Form.Item
+            rules={[{ required: true }]}
+            name="username"
+            label="username"
+            help="please type "
+          >
+            <Input
+              type="text"
+              value={username}
+              onChange={handleUsernameChange}
+              placeholder="username"
+            />
+          </Form.Item>
+          <Form.Item
+            rules={[{ required: true }]}
+            name="email"
+            label="email"
+            help="please type your email address "
+          >
+            <Input
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+              placeholder="email"
+            />
+          </Form.Item>
+          <Form.Item
+            rules={[{ required: true }]}
+            name="password"
+            label="password"
+            help="please type "
+          >
+            <Input
+              type="password"
+              value={password}
+              onChange={handlePasswordChange}
+              placeholder="password"
+            />
+          </Form.Item>
+        </Form>
 
-              <Input
-                bordered
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Space />
-              <Input
-                label="Password"
-                bordered
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Space />
-
-              <Button type="submit" bordered color="gradient" auto>
-                Register User
-              </Button>
-            </Grid>
-          </form>
-        </Card.Body>
-        <Card.Divider />
-
-        <Card.Footer>
-          <Link href="/register">New here? Sign up instead</Link>
-        </Card.Footer>
+        <Divider />
       </Card>
     </>
   );

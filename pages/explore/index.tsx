@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Button, Container, Grid } from "@nextui-org/react";
 
-import { Layout, Card, Typography } from "@douyinfe/semi-ui";
 import { PrismaClient } from "@prisma/client";
 import "react-activity-feed/dist/index.css";
 import {
@@ -25,7 +24,7 @@ import {
 } from "react-activity-feed";
 import stream from "getstream";
 import { signOut, useSession } from "next-auth/react";
-import NavBar from "../components/NavBar";
+import Nav from "../components/NavBar";
 import { connect } from "getstream";
 
 const Explore: NextPage = ({}) => {
@@ -44,12 +43,12 @@ const Explore: NextPage = ({}) => {
     appId
   );
 
-  const globalFeed = client.feed(
-    "user",
-    "globalUser",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0"
-  );
-  globalFeed.follow("user", username, userToken);
+  // const globalFeed = client.feed(
+  //   "user",
+  //   "globalUser",
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0"
+  // );
+  // globalFeed.follow("user", username, userToken);
 
   // const client = connect(apiKey, appId);
 
@@ -67,7 +66,7 @@ const Explore: NextPage = ({}) => {
               </li>
             ))}
           </ul> */}
-        <Typography>Global Feed all users posts to go here</Typography>
+        <Text>Global Feed all users posts to go here</Text>
 
         <StreamApp
           apiKey={apiKey}

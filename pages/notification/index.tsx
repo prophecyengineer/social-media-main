@@ -4,7 +4,7 @@ import styles from "./Notification.module.css";
 import * as React from "react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { Container, Card, Button, Grid, Typography } from "@douyinfe/semi-ui";
+import { Container, Card, Button, Grid, Text } from "@douyinfe/semi-ui";
 import "react-activity-feed/dist/index.css";
 import { connect } from "getstream";
 import {

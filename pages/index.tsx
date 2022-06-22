@@ -2,33 +2,26 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import {
-  Layout,
-  Nav,
-  Button,
-  Breadcrumb,
-  Skeleton,
-  Avatar,
-  Col,
-  Row,
-  Toast,
-} from "@douyinfe/semi-ui";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { signIn } from "next-auth/react";
+import React, { useState, useEffect, useRef } from "react";
+import { Form, Input, Button, Dialog } from "antd-mobile";
 
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
-  // const [email, setEmail] = useState('');
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  const handleUsernameChange = (value) => {
+    setUsername(value);
+  };
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+  };
   const router = useRouter();
 
-  const handleLogin = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
+  const onFinish = (values: any) => {
     signIn("credentials", {
       username,
       password,
@@ -47,36 +40,58 @@ const Home: NextPage = () => {
         router.push(result.url);
       }
     });
+    Dialog.alert({
+      content: <pre>{JSON.stringify(values, null, 2)}</pre>,
+    });
   };
-  return (
-    <div className={styles.container}>
-      <Button onClick={() => Toast.warning({ content: "welcome" })}>
-        Hello Semi
-      </Button>
-      <form onSubmit={handleLogin}>
-        {loginError}
 
-        <label>
-          Username:{" "}
-          <input
+  // const onFinish = (values: any) => {
+  //   Dialog.alert({
+  //     content: <pre>{JSON.stringify(values, null)}</pre>,
+  //   });
+  // };
+  return (
+    <>
+      <Form
+        name="form"
+        onFinish={onFinish}
+        footer={
+          <Button block type="submit" color="primary" size="large">
+            Submit
+          </Button>
+        }
+      >
+        <Form.Header>Sign In</Form.Header>
+
+        <Form.Item
+          rules={[{ required: true }]}
+          name="username"
+          label="username"
+          help="please type "
+        >
+          <Input
             type="text"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={handleUsernameChange}
+            placeholder="username"
           />
-        </label>
-        <label>
-          Password:{" "}
-          <input
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true }]}
+          name="password"
+          label="password"
+          help="please type "
+        >
+          <Input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
+            placeholder="password"
           />
-        </label>
-        <button type="submit">Submit login</button>
-
-        <Link href="/register">Register</Link>
-      </form>
-    </div>
+        </Form.Item>
+      </Form>
+      <Link href="/register">New here? Register</Link>
+    </>
   );
 };
 
