@@ -36,25 +36,6 @@ const Home = () => {
 
   console.log("userToken", userToken);
 
-  // const UserFollowing = () => {
-  //   const userOne = client.feed("user", username);
-  //   userOne
-  //     .following()
-  //     .then((res) => {
-  //       let List = [];
-  //       for (let i = 0; i < res.results.length; i++) {
-  //         const user = res.results[i].target_id.slice(9);
-  //         List.push(user);
-  //       }
-  //       console.log("following list", List);
-
-  //       setFollowingListState(List);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
-
   //   const currentUser = client.feed(
   //     "user",
   //     "globalUser",
