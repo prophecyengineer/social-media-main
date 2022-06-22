@@ -5,7 +5,7 @@ import styles from "./Explore.module.css";
 import * as React from "react";
 
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 import { PrismaClient } from "@prisma/client";
 import "react-activity-feed/dist/index.css";
@@ -38,6 +38,7 @@ const Explore: NextPage = ({}) => {
   // const client = stream.connect(apiKey, userToken, appId);
 
   const client = stream.connect(apiKey, userToken, appId);
+  const [followingListState, setFollowingListState] = useState([]);
 
   // const globalFeed = client.feed(
   //   "user",
@@ -57,6 +58,46 @@ const Explore: NextPage = ({}) => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0"
   );
   globalFeed.follow("user", username, userToken);
+
+  const UserFollowing = () => {
+    const userOne = client.feed("home", username);
+    userOne
+      .following()
+      .then((res) => {
+        let List = [];
+        for (let i = 0; i < res.results.length; i++) {
+          const user = res.results[i].target_id.slice(5);
+          List.push(user);
+        }
+        console.log("following list", List);
+
+        setFollowingListState(List);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    // Activities();
+    UserFollowing();
+    // UserFollowers();
+  }, []);
+
+  // function to follow a user from the main activity in middle of page
+  const followerUser = (userToFollow) => {
+    const userOne = client.feed("home", client.userId);
+    userOne.follow("user", userToFollow);
+    UserFollowing();
+    // UserFollowers();
+  };
+
+  const unfollowerUser = (userToUnFollow) => {
+    const userOne = client.feed("home", client.userId);
+    userOne.unfollow("user", userToUnFollow, { keepHistory: true });
+    UserFollowing();
+    // UserFollowers();
+  };
 
   return (
     <>
@@ -108,38 +149,18 @@ const Explore: NextPage = ({}) => {
                   activity={activity?.activity || props.activity}
                   HeaderRight={() => (
                     <Card>
-                      <Button
-                        onClick={() => {
-                          const currentUser = client.feed(
-                            "home",
-                            username,
-                            userToken
-                          );
-                          currentUser.follow(
-                            "user",
-                            props.activity.actor.id,
-                            userToken
-                          );
-                        }}
-                      >
-                        follow {props.activity.actor.id}
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          const currentUser = client.feed(
-                            "home",
-                            username,
-                            userToken
-                          );
-                          currentUser.unfollow(
-                            "user",
-                            props.activity.actor.id,
-                            userToken
-                          );
-                        }}
-                      >
-                        unfollow {props.activity.actor.id}
-                      </Button>
+                      {followingListState.includes(props.activity.actor.id) ? (
+                        <FollowButton
+                          followed
+                          onClick={() =>
+                            unfollowerUser(props.activity.actor.id)
+                          }
+                        />
+                      ) : (
+                        <FollowButton
+                          onClick={() => followerUser(props.activity.actor.id)}
+                        />
+                      )}
                     </Card>
                   )}
                   Footer={() => (
@@ -161,29 +182,5 @@ const Explore: NextPage = ({}) => {
     </>
   );
 };
-
-// export async function getServerSideProps() {
-//   const prisma = new PrismaClient();
-
-//   const users = await prisma.user.findMany();
-//   // const users = await res.json()
-
-//   let stream = require("getstream");
-
-//   return {
-//     props: {
-//       users: users.map(
-//         (user: user) =>
-//           ({
-//             ...user,
-//             username: user.username.toString(),
-//             name: user.name.toString(),
-//             email: user.email.toString(),
-//             registeredAt: user.registeredAt.toISOString(),
-//           } as unknown as user)
-//       ),
-//     },
-//   };
-// }
 
 export default Explore;

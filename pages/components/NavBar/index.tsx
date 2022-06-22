@@ -130,44 +130,6 @@ export default function Nav(props) {
       <div className={styles.thumb}>
         <Bottom />
       </div>
-      {/* <TabBar className={styles.thumb} aria-label="Operate button group">
-        <TabBar.Item
-          key="/home"
-          title="home"
-          icon={<LocationOutline />}
-          badge={5}
-        />
-
-        <TabBar.Item key="/explore" title="explore" icon={<GlobalOutline />} />
-
-        <Tabs.Tab title="蔬菜" key="vegetables"></Tabs.Tab>
-
-        <TabBar.Item
-          // onChange={() => router.push("/profile")}
-          key="/profile"
-          title="profile"
-          icon={<UserCircleOutline />}
-        />
-        <TabBar.Item
-          key="/notification"
-          title="notification"
-          icon={<BellOutline />}
-        
-        />
-        <Link href="/explore">
-          <Button>Explore</Button>
-        </Link>
-
-        <Link href="/profile">
-          <Button>Profile</Button>
-        </Link>
-        <Link href="/notification">
-          <Button>Notification</Button>
-        </Link>
-        <Link href="/">
-          <Button>Setting</Button>
-        </Link>
-      </TabBar> */}
     </>
   );
 }
