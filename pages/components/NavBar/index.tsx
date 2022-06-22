@@ -21,6 +21,7 @@ import {
   Grid,
   Button,
   Card,
+  Tabs,
 } from "antd-mobile";
 import {
   LocationOutline,
@@ -29,13 +30,58 @@ import {
   UserCircleOutline,
 } from "antd-mobile-icons";
 
+const Bottom: FC = () => {
+  const router = useRouter();
+
+  const { pathname } = location;
+  const setRouteActive = (value: string) => {
+    router.push(value);
+  };
+  const tabs = [
+    {
+      key: "/home",
+      title: "home",
+      icon: <LocationOutline />,
+    },
+    {
+      key: "/explore",
+      title: "explore",
+      icon: <GlobalOutline />,
+    },
+    {
+      key: "/",
+      title: "post",
+      icon: <AppOutline />,
+    },
+    {
+      key: "/profile",
+      title: "profile",
+      icon: <UserCircleOutline />,
+    },
+    {
+      key: "/notification",
+      title: "notifications",
+      icon: <BellOutline />,
+      badge: "99",
+    },
+  ];
+  return (
+    <Card>
+      <TabBar activeKey={pathname} onChange={(value) => setRouteActive(value)}>
+        {tabs.map((item) => (
+          <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
+        ))}
+      </TabBar>
+    </Card>
+  );
+};
+
 export default function Nav(props) {
   const session = useSession();
 
   const name = session.data?.user?.name;
   const image = session.data?.user?.image;
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -74,15 +120,17 @@ export default function Nav(props) {
         </div>
       )}
 
-      <div className={styles.top}>
+      <Card className={styles.top}>
         <NavBar right={right} back={left} backArrow={false}>
           audit.law
         </NavBar>
-      </div>
+      </Card>
 
       {props.children}
-
-      <TabBar className={styles.thumb} aria-label="Operate button group">
+      <div className={styles.thumb}>
+        <Bottom />
+      </div>
+      {/* <TabBar className={styles.thumb} aria-label="Operate button group">
         <TabBar.Item
           key="/home"
           title="home"
@@ -91,7 +139,11 @@ export default function Nav(props) {
         />
 
         <TabBar.Item key="/explore" title="explore" icon={<GlobalOutline />} />
+
+        <Tabs.Tab title="蔬菜" key="vegetables"></Tabs.Tab>
+
         <TabBar.Item
+          // onChange={() => router.push("/profile")}
           key="/profile"
           title="profile"
           icon={<UserCircleOutline />}
@@ -100,7 +152,7 @@ export default function Nav(props) {
           key="/notification"
           title="notification"
           icon={<BellOutline />}
-          badge={99}
+        
         />
         <Link href="/explore">
           <Button>Explore</Button>
@@ -115,7 +167,7 @@ export default function Nav(props) {
         <Link href="/">
           <Button>Setting</Button>
         </Link>
-      </TabBar>
+      </TabBar> */}
     </>
   );
 }

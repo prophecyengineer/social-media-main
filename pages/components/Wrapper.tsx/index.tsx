@@ -10,12 +10,27 @@ export default function Wrapper(props) {
   const router = useRouter();
 
   if (
-    (session !== null && session?.status === "authenticated") ||
+    session === null ||
     router.pathname === "/" ||
     router.pathname === "/register"
   ) {
     return <>{props.children}</>;
-  } else {
+  }
+  if (
+    (session !== null && session?.status === "authenticated") ||
+    router.pathname === "/"
+  ) {
+    return (
+      <>
+        <Nav>{props.children}</Nav>
+      </>
+    );
+  }
+  if (session === null && session?.status !== "authenticated")
+    router.pathname === "/home" ||
+      router.pathname === "/profile" ||
+      router.pathname === "/explore";
+  {
     return (
       <>
         <h1>You are not authenticated</h1>

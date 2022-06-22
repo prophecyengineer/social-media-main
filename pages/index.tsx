@@ -4,14 +4,22 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Input, Button, Dialog } from "antd-mobile";
+import { redirect } from "next/dist/server/api-utils";
 
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  const router = useRouter();
+  const session = useSession();
+
+  if (session !== null && session?.status === "authenticated") {
+    router.push("/home");
+  }
 
   const handleUsernameChange = (value) => {
     setUsername(value);
@@ -19,7 +27,6 @@ const Home: NextPage = () => {
   const handlePasswordChange = (value) => {
     setPassword(value);
   };
-  const router = useRouter();
 
   const onFinish = (values: any) => {
     signIn("credentials", {

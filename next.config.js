@@ -2,7 +2,7 @@
 const withTM = require("next-transpile-modules")(["antd-mobile"]);
 
 const nextConfig = withTM({
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     domains: ["img.icons8.com", "unsplash.com", "placekitten.com"],
   },

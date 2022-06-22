@@ -4,9 +4,10 @@ import styles from "./Notification.module.css";
 import * as React from "react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { Container, Card, Button, Grid, Text } from "@douyinfe/semi-ui";
 import "react-activity-feed/dist/index.css";
 import { connect } from "getstream";
+import { Form, Input, Button, Dialog, Card } from "antd-mobile";
+
 import {
   StreamApp,
   NotificationDropdown,
@@ -21,7 +22,6 @@ import {
 } from "react-activity-feed";
 import stream from "getstream";
 import { useEffect } from "react";
-import NavBar from "../components/NavBar";
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
 const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;

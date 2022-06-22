@@ -6,7 +6,6 @@ import * as React from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Button, Container, Grid } from "@nextui-org/react";
 
 import { PrismaClient } from "@prisma/client";
 import "react-activity-feed/dist/index.css";
@@ -22,9 +21,10 @@ import {
   StatusUpdateForm,
   FollowButton,
 } from "react-activity-feed";
+import { Form, Input, Button, Dialog, Card } from "antd-mobile";
+
 import stream from "getstream";
 import { signOut, useSession } from "next-auth/react";
-import Nav from "../components/NavBar";
 import { connect } from "getstream";
 
 const Explore: NextPage = ({}) => {
@@ -37,11 +37,7 @@ const Explore: NextPage = ({}) => {
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
   // const client = stream.connect(apiKey, userToken, appId);
 
-  const client = stream.connect(
-    apiKey,
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0",
-    appId
-  );
+  const client = stream.connect(apiKey, userToken, appId);
 
   // const globalFeed = client.feed(
   //   "user",
@@ -53,6 +49,14 @@ const Explore: NextPage = ({}) => {
   // const client = connect(apiKey, appId);
 
   //what if we getUsers from getstream instead?
+
+  //follow the current user, this is one massive feed
+  const globalFeed = client.feed(
+    "user",
+    "globalUser",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0"
+  );
+  globalFeed.follow("user", username, userToken);
 
   return (
     <>
@@ -66,7 +70,7 @@ const Explore: NextPage = ({}) => {
               </li>
             ))}
           </ul> */}
-        <Text>Global Feed all users posts to go here</Text>
+        <h2>Global Feed all users posts to go here</h2>
 
         <StreamApp
           apiKey={apiKey}
@@ -103,9 +107,8 @@ const Explore: NextPage = ({}) => {
                   // data={{ name: props.activity.actor.data.id }}
                   activity={activity?.activity || props.activity}
                   HeaderRight={() => (
-                    <Grid>
+                    <Card>
                       <Button
-                        size="xs"
                         onClick={() => {
                           const currentUser = client.feed(
                             "home",
@@ -122,7 +125,6 @@ const Explore: NextPage = ({}) => {
                         follow {props.activity.actor.id}
                       </Button>
                       <Button
-                        size="xs"
                         onClick={() => {
                           const currentUser = client.feed(
                             "home",
@@ -138,7 +140,7 @@ const Explore: NextPage = ({}) => {
                       >
                         unfollow {props.activity.actor.id}
                       </Button>
-                    </Grid>
+                    </Card>
                   )}
                   Footer={() => (
                     <div style={{ padding: "8px 16px" }}>
