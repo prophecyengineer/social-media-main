@@ -303,8 +303,8 @@ const Profile: NextPage = (props) => {
               {/* </CloudinaryContext> */}
               <Space />
               <Button
-                color="secondary"
-                // onClick={() => beginUpload("image")}
+
+              // onClick={() => beginUpload("image")}
               >
                 Upload Profile Pic
               </Button>
@@ -360,7 +360,7 @@ const Profile: NextPage = (props) => {
               Edit
             </Button>
           ) : (
-            <Button color="secondary" onClick={handleFormSubmit}>
+            <Button color="primary" onClick={handleFormSubmit}>
               Save
             </Button>
           )}

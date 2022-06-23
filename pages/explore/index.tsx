@@ -101,7 +101,7 @@ const Explore: NextPage = ({}) => {
 
   return (
     <>
-      <div className={styles.container}>
+      <div>
         <h1 className={styles.title}> Explore </h1>
 
         {/* <ul>
@@ -147,29 +147,36 @@ const Explore: NextPage = ({}) => {
                   {...props}
                   // data={{ name: props.activity.actor.data.id }}
                   activity={activity?.activity || props.activity}
+                  Content={({ activity }) => <Card>{activity.object}</Card>}
                   HeaderRight={() => (
                     <Card>
                       {followingListState.includes(props.activity.actor.id) ? (
-                        <FollowButton
-                          followed
+                        <Button
                           onClick={() =>
                             unfollowerUser(props.activity.actor.id)
                           }
-                        />
+                        >
+                          following
+                        </Button>
                       ) : (
-                        <FollowButton
+                        <Button
+                          color="primary"
                           onClick={() => followerUser(props.activity.actor.id)}
-                        />
+                        >
+                          follow
+                        </Button>
                       )}
                     </Card>
                   )}
                   Footer={() => (
                     <div style={{ padding: "8px 16px" }}>
                       <LikeButton {...props} />
+
                       <CommentField
                         activity={props.activity}
                         onAddReaction={props.onAddReaction}
                       />
+
                       <CommentList activityId={props.activity.id} />
                     </div>
                   )}
