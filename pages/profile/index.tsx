@@ -26,6 +26,7 @@ import {
   ActivityProps,
 } from "react-activity-feed";
 import { useState, useEffect } from "react";
+const axios = require("axios").default;
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
 const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
@@ -39,6 +40,7 @@ const Profile: NextPage = (props) => {
   const [name, setName] = useState([]);
   const [bio, setBio] = useState([]);
   const [image, setImage] = useState([]);
+
   const session = useSession();
 
   const handleNameChange = (value) => {
@@ -57,6 +59,28 @@ const Profile: NextPage = (props) => {
   // function to change state of save profile
   const saveProfile = () => {
     setReadOnlyEditState(true);
+  };
+  // const username = session?.data?.user?.username;
+  const onFinish = async (values) => {
+    const username = "peach";
+    const image =
+      "https://i.pinimg.com/736x/b6/87/2c/b6872cf7dc116ea08d58fd4e38990c01.jpg";
+    const data = {
+      name: name,
+      username: username,
+      bio: bio,
+      image: image,
+    };
+
+    console.log("values from form", data);
+
+    await axios.post("/api/userUpdateProfile", data);
+    // signIn("credentials", {
+    //   username,
+    //   password,
+    //   callbackUrl: `${window.location.origin}/home`,
+    //   redirect: false,
+    // })
   };
 
   // input change handler for the profile save form
@@ -111,44 +135,6 @@ const Profile: NextPage = (props) => {
   }, []);
 
   // form submit handler for saving the profile data
-  const handleFormSubmit = async (event) => {
-    // event.preventDefault();
-    const data = {
-      name: name,
-      // bio: bio,
-      // image: image,
-    };
-    // first get right user lol
-    // console.log(
-    //   "info just written in",
-    //   data
-    //   // client.currentUser.data.bio
-    // );
-
-    function getThisUser() {
-      // Get the current 'global' time from an API using Promise
-      return new Promise((resolve, reject) => {
-        client.user("charlie").get();
-      });
-    }
-    getThisUser()
-      .then((currentUser) => {
-        console.log("The current user is: " + currentUser);
-        return true;
-      })
-      .catch((err) => console.log("There was an error:" + err));
-
-    getThisUser();
-
-    // client.user("charlie").update({
-    //   name: data.name,
-    //   occupation: "Software Engineer",
-    //   gender: "Male",
-    //   // name: "Alex Is Here",
-    //   // profileImage: `https://res.cloudinary.com/crowandrew/image/upload/w_400,h_400,c_crop,g_face,r_max/w_150/v1603932299/${props.profile.image}`,
-    // });
-    saveProfile();
-  };
 
   // function pulling follower data from getStream.io
   const UserFollowers = () => {
@@ -306,20 +292,21 @@ const Profile: NextPage = (props) => {
       <div className={styles.container}>
         <main className={styles.main}>
           <h1 className={styles.title}> Profile of {client.currentUser.id}</h1>
+          <h1 className={styles.title}> BIO {session.data?.user?.name}</h1>
 
           {readOnlyEditState ? (
             client.userId
           ) : (
             <Form
               name="form"
-              onFinish={handleFormSubmit}
+              onFinish={onFinish}
               footer={
                 <Button block type="submit" color="primary" size="large">
-                  Submit
+                  update profile
                 </Button>
               }
             >
-              <Form.Header>Register</Form.Header>
+              <Form.Header>Edit Profile</Form.Header>
 
               <Form.Item
                 name="name"
@@ -329,23 +316,26 @@ const Profile: NextPage = (props) => {
                 <Input
                   type="text"
                   value={name}
-                  // onChange={handleNameChange}
+                  onChange={handleNameChange}
                   placeholder="name"
                 />
               </Form.Item>
-              {/* <Form.Item
+              <Form.Item name="username" label="username" help="please type ">
+                <Input disabled type="text" placeholder="username" />
+              </Form.Item>
+              <Form.Item
                 rules={[{ required: true }]}
                 name="bio"
                 label="bio"
-                help="please type "
+                help="please type your bio"
               >
                 <Input
                   type="text"
                   value={bio}
                   onChange={handleBioChange}
-                  placeholder="username"
+                  placeholder="bio"
                 />
-              </Form.Item> */}
+              </Form.Item>
             </Form>
           )}
 
@@ -374,8 +364,8 @@ const Profile: NextPage = (props) => {
               Edit
             </Button>
           ) : (
-            <Button color="primary" onClick={handleFormSubmit}>
-              Save
+            <Button block type="submit" color="primary" size="large">
+              update profile other buttoon
             </Button>
           )}
 

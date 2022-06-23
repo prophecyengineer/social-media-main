@@ -34,15 +34,6 @@ export default async (req, res) => {
       // ensure the user data is stored on Stream
 
 
-
-
-      client.user(username).getOrCreate({
-        name: "New UserRegs",
-        occupation: "Made in reg",
-        gender: 'alien'
-      });
-
-
       await prisma.user.create({
         data: {
           name: name,
@@ -55,6 +46,7 @@ export default async (req, res) => {
           stripeToken: "",
         },
       });
+
 
 
 

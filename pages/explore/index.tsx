@@ -133,7 +133,7 @@ const Explore: NextPage = ({}) => {
                         name: props.activity.actor.id,
 
                         //need to assign the profileImage as user?.image in getstream
-                        profileImage: session.data?.user?.image,
+                        profileImage: props?.activity?.actor?.data?.image,
                       },
                     },
                   },
