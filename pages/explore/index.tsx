@@ -20,8 +20,9 @@ import {
   CommentField,
   StatusUpdateForm,
   FollowButton,
+  Avatar,
 } from "react-activity-feed";
-import { Form, Input, Button, Dialog, Card } from "antd-mobile";
+import { Form, Input, Button, Dialog, Card, Divider } from "antd-mobile";
 
 import stream from "getstream";
 import { signOut, useSession } from "next-auth/react";
@@ -102,8 +103,6 @@ const Explore: NextPage = ({}) => {
   return (
     <>
       <div>
-        <h1 className={styles.title}> Explore </h1>
-
         {/* <ul>
             {users.map((user) => (
               <li className={styles.title} key={user.username}>
@@ -111,7 +110,6 @@ const Explore: NextPage = ({}) => {
               </li>
             ))}
           </ul> */}
-        <h2>Global Feed all users posts to go here</h2>
 
         <StreamApp
           apiKey={apiKey}
@@ -143,44 +141,59 @@ const Explore: NextPage = ({}) => {
               }
 
               return (
-                <Activity
-                  {...props}
-                  // data={{ name: props.activity.actor.data.id }}
-                  activity={activity?.activity || props.activity}
-                  Content={({ activity }) => <Card>{activity.object}</Card>}
-                  HeaderRight={() => (
-                    <Card>
-                      {followingListState.includes(props.activity.actor.id) ? (
-                        <Button
-                          onClick={() =>
-                            unfollowerUser(props.activity.actor.id)
-                          }
-                        >
-                          following
-                        </Button>
-                      ) : (
-                        <Button
-                          color="primary"
-                          onClick={() => followerUser(props.activity.actor.id)}
-                        >
-                          follow
-                        </Button>
-                      )}
-                    </Card>
-                  )}
-                  Footer={() => (
-                    <div style={{ padding: "8px 16px" }}>
-                      <LikeButton {...props} />
+                <>
+                  <Activity
+                    className="userCard"
+                    {...props}
+                    // data={{ name: props.activity.actor.data.id }}
+                    activity={activity?.activity || props.activity}
+                    // Card={() => <Card>{activity.object}</Card>}
+                    // Content={({ activity }) => <Card>{activity.object}</Card>}
+                    // Header={() => (
+                    //   <>
+                    //     <Avatar src={props.activity.actor?.image} />
+                    //     <
+                    //   </>
+                    // )}
+                    HeaderRight={() => (
+                      <>
+                        {followingListState.includes(
+                          props.activity.actor.id
+                        ) ? (
+                          <Button
+                            onClick={() =>
+                              unfollowerUser(props.activity.actor.id)
+                            }
+                          >
+                            following
+                          </Button>
+                        ) : (
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              followerUser(props.activity.actor.id)
+                            }
+                          >
+                            follow
+                          </Button>
+                        )}
+                      </>
+                    )}
+                    Footer={() => (
+                      <div style={{ padding: "8px 16px" }}>
+                        <LikeButton {...props} />
 
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
+                        <CommentField
+                          activity={props.activity}
+                          onAddReaction={props.onAddReaction}
+                        />
 
-                      <CommentList activityId={props.activity.id} />
-                    </div>
-                  )}
-                />
+                        <CommentList activityId={props.activity.id} />
+                      </div>
+                    )}
+                  />
+                  <Divider />
+                </>
               );
             }}
           />

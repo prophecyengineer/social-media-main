@@ -1,18 +1,9 @@
 .top {
   position: sticky;
   top: 0;
-  overflow: hidden;
-  width: 100%;
-}
 
-.Nav {
-  position: sticky;
-  top: 0;
-  overflow: hidden;
-}
-
-.card {
-  width: 100vw;
+  border-radius: 5px;
+  border-bottom: black solid 0.5px;
 }
 
 .thumb {

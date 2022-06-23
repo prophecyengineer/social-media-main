@@ -25,3 +25,12 @@
   --adm-color-primary: #a062d4;
   --adm-color-secondary: #a032d4;
 }
+
+.logo {
+  scale: 0.8;
+  margin-bottom: -12px !important;
+}
+
+/* .userCard {
+  border: solid black 1px;
+} */

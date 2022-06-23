@@ -29,6 +29,19 @@ export default async (req, res) => {
       const hash = await bcrypt.hash(password, 0);
 
 
+      // const newclient = stream.connect(apiKey, userToken, appId, { location: "dublin" });
+
+      // ensure the user data is stored on Stream
+
+
+
+
+      client.user(username).getOrCreate({
+        name: "New UserRegs",
+        occupation: "Made in reg",
+        gender: 'alien'
+      });
+
 
       await prisma.user.create({
         data: {
@@ -42,6 +55,8 @@ export default async (req, res) => {
           stripeToken: "",
         },
       });
+
+
 
       return res.status(200).end();
     } catch (err) {
