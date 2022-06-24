@@ -81,7 +81,7 @@ const Bottom = () => {
   );
 };
 
-export default function Nav(props) {
+export default function Nav(props, username) {
   const session = useSession();
 
   const name = session.data?.user?.name;

@@ -1,16 +1,10 @@
 /* eslint-disable react/jsx-key */
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
 import styles from "./Profile.module.css";
 import * as React from "react";
-import { signOut, useSession } from "next-auth/react";
-
+import { useSession } from "next-auth/react";
 import { Modal, Button, Dialog, Grid, Input, Space, Form } from "antd-mobile";
-
-import { prisma, PrismaClient } from "@prisma/client";
 import "react-activity-feed/dist/index.css";
-import { connect, EnrichedUser } from "getstream";
 import {
   StreamApp,
   NotificationDropdown,
@@ -133,6 +127,10 @@ const Profile: NextPage = (props) => {
     UserFollowers();
   }, []);
 
+  const [user, setUser] = useState(null);
+  // const { user, setUser } = useUser();
+  // const { user } = useUser();
+  //when updating user, push data to getstream in userWrapper
   // form submit handler for saving the profile data
 
   // function pulling follower data from getStream.io
@@ -283,20 +281,6 @@ const Profile: NextPage = (props) => {
       </div>
     );
   };
-
-  async function getstreamUser() {
-    await client
-      .user("peach")
-      .get()
-      .then((res: { data: any }) => {
-        // use the result in here
-        console.log(res.data.name);
-        return res.data.name;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   return (
     <>
