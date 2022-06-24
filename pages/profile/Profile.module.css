@@ -1,3 +1,18 @@
 .title {
-    overflow: auto;
+  overflow: auto;
+}
+
+.avatar {
+  margin-left: 10px;
+  margin-top: -65px;
+}
+
+.hero {
+  max-height: 140px;
+  overflow: hidden;
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+  width: auto\9;
+  width: 100%;
 }

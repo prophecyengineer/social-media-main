@@ -59,15 +59,21 @@ const Bottom = () => {
     },
 
     {
-      key: "/profile",
-      title: "profile",
-      icon: <UserCircleOutline />,
+      key: "/",
+      title: "post",
+      icon: <AppOutline />,
     },
+
     {
       key: "/notification",
       title: "notifications",
       icon: <BellOutline />,
       badge: "99",
+    },
+    {
+      key: "/profile",
+      title: "profile",
+      icon: <UserCircleOutline />,
     },
   ];
   return (
@@ -81,17 +87,33 @@ const Bottom = () => {
   );
 };
 
-export default function Nav(props, username) {
+export default function Nav(props) {
+  const stream = require("getstream");
   const session = useSession();
-
   const name = session.data?.user?.name;
   const image = session.data?.user?.image;
+  const userToken = session.data?.user?.userToken;
+  const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
+  const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
+  const client = stream.connect(apiKey, userToken, appId);
+
   const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     setMounted(true);
+    getstreamUser();
   }, []);
 
+  //run this once and save as object
+  async function getstreamUser(userName = "peach") {
+    const { full } = await client.user(userName).get();
+    setUser(full);
+  }
+
+  // console.log("user here", user?.id);
+  // console.log("user name", user?.data?.name);
+  const currentUserName = user?.data?.name;
   const actions: Action[] = [
     {
       text: "Profile",
@@ -112,10 +134,8 @@ export default function Nav(props, username) {
 
   const left = (
     <>
-      <Avatar
-        onClick={() => setVisible(true)}
-        src={session?.data.user?.image}
-      ></Avatar>
+      <Avatar onClick={() => setVisible(true)} src={user?.data?.image}></Avatar>
+      {/* <h5>{user?.data?.name}</h5> */}
       <ActionSheet
         visible={visible}
         actions={actions}
@@ -132,12 +152,6 @@ export default function Nav(props, username) {
     </div>
   );
 
-  const back = () =>
-    Toast.show({
-      content: "Go back?",
-      duration: 1000,
-    });
-
   return (
     <>
       {mounted && (
@@ -148,11 +162,14 @@ export default function Nav(props, username) {
         </div>
       )}
 
-      <Card className={styles.top}>
-        <NavBar right={right} back={left} backArrow={false}>
-          audit.law
-        </NavBar>
-      </Card>
+      <NavBar
+        className={styles.top}
+        right={right}
+        back={left}
+        backArrow={false}
+      >
+        audit.law
+      </NavBar>
 
       {props.children}
       <div className={styles.thumb}>

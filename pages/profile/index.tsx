@@ -3,7 +3,19 @@ import type { NextPage } from "next";
 import styles from "./Profile.module.css";
 import * as React from "react";
 import { useSession } from "next-auth/react";
-import { Modal, Button, Dialog, Grid, Input, Space, Form } from "antd-mobile";
+import {
+  Modal,
+  Button,
+  Dialog,
+  Grid,
+  Input,
+  Image,
+  Space,
+  Form,
+  Card,
+  Tabs,
+  Avatar,
+} from "antd-mobile";
 import "react-activity-feed/dist/index.css";
 import {
   StreamApp,
@@ -14,9 +26,6 @@ import {
   CommentList,
   CommentField,
   StatusUpdateForm,
-  UserBar,
-  FollowButton,
-  DefaultUT,
   ActivityProps,
 } from "react-activity-feed";
 import { useState, useEffect } from "react";
@@ -127,9 +136,7 @@ const Profile: NextPage = (props) => {
     UserFollowers();
   }, []);
 
-  const [user, setUser] = useState(null);
   // const { user, setUser } = useUser();
-  // const { user } = useUser();
   //when updating user, push data to getstream in userWrapper
   // form submit handler for saving the profile data
 
@@ -286,11 +293,77 @@ const Profile: NextPage = (props) => {
     <>
       <div className={styles.container}>
         <main className={styles.main}>
-          <h1 className={styles.title}> </h1>
-          <h1 className={styles.title}> BIO {session.data?.user?.name}</h1>
-
           {readOnlyEditState ? (
-            client.userId
+            <>
+              <Space className={styles.heroWrapper} wrap>
+                <Image
+                  className={styles.hero}
+                  src="https://picsum.photos/400/600"
+                  fit="contain"
+                  alt="hero"
+                ></Image>
+              </Space>
+              <Grid columns={2} gap={8}>
+                <Grid.Item>
+                  <Avatar
+                    className={styles.avatar}
+                    src={session?.user?.data?.image}
+                    style={{ "--size": "80px" }}
+                  ></Avatar>
+                  <Card
+                    title={session.data?.user?.name}
+                    headerStyle={{
+                      color: "#1677ff",
+                    }}
+                    bodyClassName={styles.customBody}
+                  >
+                    {session.data?.user?.bio}
+                  </Card>
+                </Grid.Item>
+                <Grid.Item>
+                  <Card>
+                    {" "}
+                    {readOnlyEditState ? (
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          editProfile();
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    ) : (
+                      <Button block type="submit" color="primary" size="large">
+                        update profile other buttoon
+                      </Button>
+                    )}
+                  </Card>
+                </Grid.Item>
+              </Grid>
+              <Tabs defaultActiveKey="1">
+                <Tabs.Tab title="Espresso" key="1">
+                  1
+                </Tabs.Tab>
+                <Tabs.Tab title="Coffee Latte" key="2">
+                  2
+                </Tabs.Tab>
+                <Tabs.Tab title="Cappuccino" key="3">
+                  3
+                </Tabs.Tab>
+                <Tabs.Tab title="Americano" key="4">
+                  4
+                </Tabs.Tab>
+                <Tabs.Tab title="Flat White" key="5">
+                  5
+                </Tabs.Tab>
+                <Tabs.Tab title="Caramel Macchiato" key="6">
+                  6
+                </Tabs.Tab>
+                <Tabs.Tab title="Cafe Mocha" key="7">
+                  7
+                </Tabs.Tab>
+              </Tabs>
+            </>
           ) : (
             <Form
               name="form"
@@ -332,36 +405,6 @@ const Profile: NextPage = (props) => {
                 />
               </Form.Item>
             </Form>
-          )}
-
-          {/* {readOnlyEditState ? (
-            session.data?.user?.bio
-          ) : (
-            <Input
-              required
-              fullWidth
-              id="bio"
-              value={bio}
-              label="Bio"
-              name="bio"
-              autoComplete="bio"
-              onChange={(e) => setBio(e.target.value)}
-            />
-          )} */}
-
-          {readOnlyEditState ? (
-            <Button
-              color="primary"
-              onClick={() => {
-                editProfile();
-              }}
-            >
-              Edit
-            </Button>
-          ) : (
-            <Button block type="submit" color="primary" size="large">
-              update profile other buttoon
-            </Button>
           )}
 
           <FollowingComponent />
