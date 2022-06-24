@@ -30,7 +30,6 @@ const axios = require("axios").default;
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
 const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
-
 const Profile: NextPage = (props) => {
   const [followingListState, setFollowingListState] = useState([]);
   const [followerListState, setFollowerListState] = useState([]);
@@ -42,7 +41,7 @@ const Profile: NextPage = (props) => {
   const [image, setImage] = useState([]);
 
   const session = useSession();
-
+  const userName = session?.data?.user?.username;
   const handleNameChange = (value) => {
     setName(value);
   };
@@ -60,11 +59,11 @@ const Profile: NextPage = (props) => {
   const saveProfile = () => {
     setReadOnlyEditState(true);
   };
-  // const username = session?.data?.user?.username;
-  const onFinish = async (values) => {
-    const username = "peach";
-    const image =
-      "https://i.pinimg.com/736x/b6/87/2c/b6872cf7dc116ea08d58fd4e38990c01.jpg";
+  const onFinish = async (values: any, username: any) => {
+    // const username = session?.data?.user?.username;
+
+    // const username = username;
+    const image = "https://picsum.photos/200/300";
     const data = {
       name: name,
       username: username,
@@ -72,7 +71,7 @@ const Profile: NextPage = (props) => {
       image: image,
     };
 
-    console.log("values from form", data);
+    // console.log("values from form", data);
 
     await axios.post("/api/userUpdateProfile", data);
     // signIn("credentials", {
@@ -285,13 +284,25 @@ const Profile: NextPage = (props) => {
     );
   };
 
-  console.log("client hello", client.currentUser);
+  async function getstreamUser() {
+    await client
+      .user("peach")
+      .get()
+      .then((res: { data: any }) => {
+        // use the result in here
+        console.log(res.data.name);
+        return res.data.name;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <>
       <div className={styles.container}>
         <main className={styles.main}>
-          <h1 className={styles.title}> Profile of {client.currentUser.id}</h1>
+          <h1 className={styles.title}> </h1>
           <h1 className={styles.title}> BIO {session.data?.user?.name}</h1>
 
           {readOnlyEditState ? (
