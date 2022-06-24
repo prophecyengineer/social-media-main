@@ -15,6 +15,12 @@ import {
   Card,
   Tabs,
   Avatar,
+  List,
+  Popup,
+  Badge,
+  TabBar,
+  Divider,
+  FloatingPanel,
 } from "antd-mobile";
 import "react-activity-feed/dist/index.css";
 import {
@@ -27,6 +33,7 @@ import {
   CommentField,
   StatusUpdateForm,
   ActivityProps,
+  UserBar,
 } from "react-activity-feed";
 import { useState, useEffect } from "react";
 const axios = require("axios").default;
@@ -194,97 +201,114 @@ const Profile: NextPage = (props) => {
   };
 
   const FollowersComponent = () => {
+    const [visible, setVisible] = useState(false);
     // const { setVisible, bindings } = useModal();
     return (
       <div>
-        <Button>Followers {followerListState.length}</Button>
-
-        {/* <Modal scroll width="600px" aria-describedby="modal-description">
-          Users Following you
-          <Grid>
-            <Grid>
-              <Grid></Grid>
-            </Grid>
-            <Grid>
-              <Grid>
-                <Grid>
-                  <Grid>
-                    {followerListState.slice(0, 10).map((follower) => (
-                      <UserBar
-                        key={follower}
-                        username={follower}
-                        // onClickUser={console.log}
-                        avatar="https://i.pinimg.com/originals/4f/a1/41/4fa141173a1b04470bb2f850bc5da13b.png"
-                        timestamp="2022-04-19T07:44:11+00:00"
-                        subtitle="a user following you"
-                      />
-                      //  <Button
-                      //   size="xs"
-                      //   onClick={() => unfollowerUser(follower)}
-                      // >
-                      //   unfollow?
-                      // </Button>
-                    ))}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Button>Close</Button>
-        </Modal> */}
+        <>
+          <Button
+            onClick={() => {
+              setVisible(true);
+            }}
+          >
+            followers {followerListState.length}
+          </Button>
+          <Popup
+            visible={visible}
+            onMaskClick={() => {
+              setVisible(false);
+            }}
+            bodyStyle={{
+              borderTopLeftRadius: "8px",
+              borderTopRightRadius: "8px",
+              minHeight: "70vh",
+            }}
+          >
+            {followerListState.slice(0, 10).map((follower) => (
+              <Card>
+                <UserBar
+                  key={follower}
+                  username={follower}
+                  // onClickUser={console.log}
+                  avatar="https://i.pinimg.com/originals/4f/a1/41/4fa141173a1b04470bb2f850bc5da13b.png"
+                  timestamp="2022-04-19T07:44:11+00:00"
+                  subtitle="a user following you"
+                />
+                {/* <Button size="xs" onClick={() => unfollowerUser(follower)}>
+                  unfollow?
+                </Button> */}
+              </Card>
+            ))}
+          </Popup>
+        </>
       </div>
     );
   };
+
+  const tabs = [
+    {
+      key: "home",
+      title: "首页",
+      badge: Badge.dot,
+    },
+    {
+      key: "todo",
+      title: "我的待办",
+      badge: "5",
+    },
+    {
+      key: "message",
+      title: "我的消息",
+      // icon: (active: boolean) =>
+      // active ? <MessageFill /> : <MessageOutline />,
+      badge: "99+",
+    },
+    {
+      key: "personalCenter",
+      title: "个人中心",
+    },
+  ];
   const FollowingComponent = () => {
+    const [visible, setVisible] = useState(false);
+    // const { setVisible, bindings } = useModal();
     return (
       <div>
-        <Button auto shadow color="secondary" onClick={() => setVisible(true)}>
-          Following {followingListState.length}
-        </Button>
-        {/* <Modal
-          scroll
-          width="600px"
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-          {...bindings}
-        >
-          <Modal.Header>
-            <Text id="modal-title" size={18}>
-              Users you are Following
-            </Text>
-          </Modal.Header>
-          <Modal.Body>
-            <Grid>
-              <Grid>
-                <Grid></Grid>
-              </Grid>
-              <Grid>
-                {followingListState.slice(0, 10).map((follower) => (
-                  <UserBar
-                    key={follower}
-                    username={follower}
-                    // onClickUser={console.log}
-                    avatar="https://i.pinimg.com/originals/4f/a1/41/4fa141173a1b04470bb2f850bc5da13b.png"
-                    timestamp="2022-04-19T07:44:11+00:00"
-                    subtitle="a user you're following"
-                  />
-                  // needing a custom component here
-                  // <Button
-                  //   size="xs"
-                  //   onClick={() => unfollowerUser(follower)}
-                  // >
-                  //   unfollow?
-                  // </Button>
-                ))}
-              </Grid>
-            </Grid>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button auto flat color="error" onClick={() => setVisible(false)}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
+        <>
+          <Button
+            onClick={() => {
+              setVisible(true);
+            }}
+          >
+            following {followingListState.length}
+          </Button>
+          <Popup
+            visible={visible}
+            onMaskClick={() => {
+              setVisible(false);
+            }}
+            bodyStyle={{
+              borderTopLeftRadius: "8px",
+              borderTopRightRadius: "8px",
+              minHeight: "70vh",
+            }}
+          >
+            {followingListState.slice(0, 10).map((following) => (
+              <Card>
+                <UserBar
+                  key={following}
+                  username={following}
+                  // onClickUser={console.log}
+                  avatar="https://i.pinimg.com/originals/4f/a1/41/4fa141173a1b04470bb2f850bc5da13b.png"
+                  timestamp="2022-04-19T07:44:11+00:00"
+                  subtitle="a user following you"
+                />
+                {/* <Button size="xs" onClick={() => unfollowerUser(follower)}>
+                  unfollow?
+                </Button> */}
+              </Card>
+            ))}
+          </Popup>
+        </>
       </div>
     );
   };
@@ -295,7 +319,7 @@ const Profile: NextPage = (props) => {
         <main className={styles.main}>
           {readOnlyEditState ? (
             <>
-              <Space className={styles.heroWrapper} wrap>
+              <Space justify="center" block className={styles.heroWrapper} wrap>
                 <Image
                   className={styles.hero}
                   src="https://picsum.photos/400/600"
@@ -303,43 +327,68 @@ const Profile: NextPage = (props) => {
                   alt="hero"
                 ></Image>
               </Space>
-              <Grid columns={2} gap={8}>
-                <Grid.Item>
-                  <Avatar
-                    className={styles.avatar}
-                    src={session?.user?.data?.image}
-                    style={{ "--size": "80px" }}
-                  ></Avatar>
-                  <Card
-                    title={session.data?.user?.name}
-                    headerStyle={{
-                      color: "#1677ff",
-                    }}
-                    bodyClassName={styles.customBody}
-                  >
-                    {session.data?.user?.bio}
-                  </Card>
-                </Grid.Item>
-                <Grid.Item>
-                  <Card>
-                    {" "}
-                    {readOnlyEditState ? (
-                      <Button
-                        color="primary"
-                        onClick={() => {
-                          editProfile();
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      <Button block type="submit" color="primary" size="large">
-                        update profile other buttoon
-                      </Button>
-                    )}
-                  </Card>
-                </Grid.Item>
-              </Grid>
+              <Space block justify="center">
+                <Avatar
+                  className={styles.avatar}
+                  src="https://i.pinimg.com/736x/b6/87/2c/b6872cf7dc116ea08d58fd4e38990c01.jpg"
+                  style={{ "--size": "120px" }}
+                ></Avatar>
+              </Space>
+
+              <Space block justify="center" className={styles.title}>
+                <h2>{session.data?.user?.name}</h2>
+              </Space>
+              <Space block justify="center">
+                <p>{session.data?.user?.bio}</p>
+              </Space>
+              <TabBar>
+                {tabs.map((item) => (
+                  <TabBar.Item key={item.key} title={item.title} />
+                ))}
+              </TabBar>
+              <Space block justify="center">
+                <Grid columns={2}>
+                  <Grid.Item>
+                    <FollowingComponent />
+                  </Grid.Item>
+                  <Grid.Item>
+                    <FollowersComponent />
+                  </Grid.Item>
+                </Grid>
+              </Space>
+              <Card
+                headerStyle={{
+                  color: "#1677ff",
+                }}
+                bodyClassName={styles.customBody}
+              >
+                <Space>{session.data?.user?.bio}</Space>{" "}
+                {readOnlyEditState ? (
+                  <Space>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        editProfile();
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        editProfile();
+                      }}
+                    >
+                      Subscribe
+                    </Button>
+                  </Space>
+                ) : (
+                  <Button block type="submit" color="primary" size="large">
+                    update profile other buttoon
+                  </Button>
+                )}
+              </Card>
+
               <Tabs defaultActiveKey="1">
                 <Tabs.Tab title="Espresso" key="1">
                   1
@@ -407,8 +456,6 @@ const Profile: NextPage = (props) => {
             </Form>
           )}
 
-          <FollowingComponent />
-          <FollowersComponent />
           <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
             <StatusUpdateForm />
             <FlatFeed
