@@ -20,6 +20,7 @@ export default function Wrapper(props) {
     getstreamUser();
   }, []);
 
+  //run this once and save as object
   async function getstreamUser(userName = "peach") {
     const { full } = await client.user(userName).get();
     setUser(full);
@@ -28,7 +29,7 @@ export default function Wrapper(props) {
   console.log("user here", user.id);
   console.log("user name", user.data.name);
 
-  const currentUserUsername = user.data.name;
+  // const currentUserUsername = user?.data?.name;
 
   if (
     session === null ||
@@ -44,7 +45,7 @@ export default function Wrapper(props) {
     return (
       <>
         <Nav>
-          <h2>{currentUserUsername}</h2>
+          <h2>{user.data.name}</h2>
           {props.children}
         </Nav>
       </>
