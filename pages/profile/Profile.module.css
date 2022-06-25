@@ -33,3 +33,13 @@
   overflow: hidden;
   align-items: center;
 }
+
+.smallButton {
+  font-size: 13px !important;
+  width: 100%;
+  color: rgb(109, 109, 109);
+}
+
+.mediumButton {
+  width: 100% !important;
+}

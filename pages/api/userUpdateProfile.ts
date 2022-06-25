@@ -5,23 +5,11 @@ import { connect } from "getstream";
 
 
 
-//take in form data of edit profile
-//send up here, 
-//update the getstream user also prisma 
-//make prisma update work first
-
-
-
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
 const apiSecret = process.env.REACT_APP_STREAM_APP_SECRET as string;
 const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 
-// const client = connect(apiKey, appId, apiSecret);
 
-// let stream = require("getstream");
-
-// connect to the us-east region
-// const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
@@ -35,21 +23,14 @@ export default async (req, res) => {
         try {
 
             console.log('came from form', username, name, bio, image)
-            //     process.env.REACT_APP_STREAM_APP_SECRET,
-            //     process.env.REACT_APP_STREAM_APP_ID,
-            //     { location: 'us-east' },
 
-            // const client = connect(apiKey, appId, apiSecret);
 
             let stream = require("getstream");
 
-            // connect to the us-east region
             const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
 
-            // fuck yeah this one worked
 
-            // client.user('jerry').update({ name: "Jane Doe", occupation: "Software Engineer", gender: "female" });
-            client.user('peach').update({ name: name, bio: bio, image: "https://static.wikia.nocookie.net/hunger_games_simulator/images/f/f3/Peachtoadstool.png/revision/latest?cb=20201221092325" });
+            client.user('peach').update({ name: name, bio: bio, image: image });
 
             console.log('did the getstream bit')
 
