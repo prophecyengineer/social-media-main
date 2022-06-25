@@ -25,7 +25,7 @@ export default function Wrapper(props) {
       </>
     );
   }
-  if (session === null && session?.status !== "authenticated")
+  if (session === null)
     router.pathname === "/home" ||
       router.pathname === "/profile" ||
       router.pathname === "/explore";

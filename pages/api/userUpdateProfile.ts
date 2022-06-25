@@ -14,7 +14,7 @@ const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
     // const session = useSession();
-    // const idHere = session.data?.user?.id
+    // const username = session?.data?.user?.username;
 
     if (req.method === "POST") {
         //send username automatically to use here
@@ -30,7 +30,7 @@ export default async (req, res) => {
             const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
 
 
-            client.user('peach').update({ name: name, bio: bio, image: image });
+            client.user(username).update({ name: name, bio: bio, image: image });
 
             console.log('did the getstream bit')
 

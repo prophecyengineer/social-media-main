@@ -54,7 +54,6 @@ const Profile: NextPage = (props) => {
   const [image, setImage] = useState([]);
   const { user } = useUserState();
 
-  console.log("user profile", user);
   const session = useSession();
   const userName = session?.data?.user?.username;
   const handleNameChange = (value) => {
@@ -436,10 +435,7 @@ const Profile: NextPage = (props) => {
                             Footer={() => (
                               <div style={{ padding: "8px 16px" }}>
                                 <LikeButton {...props} />
-                                <CommentField
-                                  activity={props.activity}
-                                  onAddReaction={props.onAddReaction}
-                                />
+                                <CommentField activity={props.activity} />
                                 <CommentList activityId={props.activity.id} />
                               </div>
                             )}
