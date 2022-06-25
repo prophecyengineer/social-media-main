@@ -2,7 +2,7 @@ import * as React from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Nav from "../NavBar";
+import Layout from "../Layout";
 
 export default function Wrapper(props) {
   const session = useSession();
@@ -21,7 +21,7 @@ export default function Wrapper(props) {
   ) {
     return (
       <>
-        <Nav>{props.children}</Nav>
+        <Layout>{props.children}</Layout>
       </>
     );
   }
