@@ -34,7 +34,7 @@ export default async (req, res) => {
 
         try {
 
-
+            console.log('came from form', username, name, bio, image)
             //     process.env.REACT_APP_STREAM_APP_SECRET,
             //     process.env.REACT_APP_STREAM_APP_ID,
             //     { location: 'us-east' },
@@ -49,10 +49,9 @@ export default async (req, res) => {
             // fuck yeah this one worked
 
             // client.user('jerry').update({ name: "Jane Doe", occupation: "Software Engineer", gender: "female" });
-            client.user('peach').update({ name: name, bio: bio, image: image });
+            client.user('peach').update({ name: name, bio: bio, image: "https://static.wikia.nocookie.net/hunger_games_simulator/images/f/f3/Peachtoadstool.png/revision/latest?cb=20201221092325" });
 
             console.log('did the getstream bit')
-
 
             await prisma.user.update({
                 data: {

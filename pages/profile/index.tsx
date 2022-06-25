@@ -36,10 +36,12 @@ import {
   UserBar,
 } from "react-activity-feed";
 import { useState, useEffect } from "react";
-const axios = require("axios").default;
+import { useUserState } from "../../context/user";
 
+const axios = require("axios").default;
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
 const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
+
 const Profile: NextPage = (props) => {
   const [followingListState, setFollowingListState] = useState([]);
   const [followerListState, setFollowerListState] = useState([]);
@@ -49,7 +51,9 @@ const Profile: NextPage = (props) => {
   const [name, setName] = useState([]);
   const [bio, setBio] = useState([]);
   const [image, setImage] = useState([]);
+  const { user } = useUserState();
 
+  console.log("user profile", user);
   const session = useSession();
   const userName = session?.data?.user?.username;
   const handleNameChange = (value) => {
@@ -69,10 +73,9 @@ const Profile: NextPage = (props) => {
   const saveProfile = () => {
     setReadOnlyEditState(true);
   };
-  const onFinish = async (values: any, username: any) => {
-    // const username = session?.data?.user?.username;
 
-    // const username = username;
+  const onFinish = async (values: any) => {
+    const username = user.id;
     const image = "https://picsum.photos/200/300";
     const data = {
       name: name,
@@ -91,44 +94,6 @@ const Profile: NextPage = (props) => {
     //   redirect: false,
     // })
   };
-
-  // input change handler for the profile save form
-  // const inputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   props.setProfile({
-  //     ...props.user,
-  //     [name]: value,
-  //   });
-  // };
-
-  // function for navigation butttons
-  // const viewPanelChange = (panelName) => {
-  //   setViewPanelState(panelName);
-  //   if (panelName === "activityFeed") {
-  //     Activities();
-  //   }
-  // };
-
-  // function to call Cloudinary widget to upload profile photo
-  // const beginUpload = (tag) => {
-  //   const uploadOptions = {
-  //     cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-  //     tags: [tag, "anImage"],
-  //     uploadPreset: process.env.REACT_APP_CLOUDINARY_PRESET,
-  //   };
-  //   openUploadWidget(uploadOptions, (error, photos) => {
-  //     if (!error) {
-  //       if (photos.event === "success") {
-  //         props.setProfile({
-  //           ...props.profile,
-  //           image: photos.info.public_id,
-  //         });
-  //       }
-  //     } else {
-  //       console.error(error);
-  //     }
-  //   });
-  // };
 
   const stream = require("getstream");
 
@@ -248,7 +213,7 @@ const Profile: NextPage = (props) => {
   const tabs = [
     {
       key: "home",
-      title: "首页",
+      title: "Followers",
       badge: Badge.dot,
     },
     {
@@ -336,10 +301,10 @@ const Profile: NextPage = (props) => {
               </Space>
 
               <Space block justify="center" className={styles.title}>
-                <h2>{session.data?.user?.name}</h2>
+                <h2>{user?.data?.name}</h2>
               </Space>
               <Space block justify="center">
-                <p>{session.data?.user?.bio}</p>
+                <p>{user?.data?.bio}</p>
               </Space>
               <TabBar>
                 {tabs.map((item) => (
@@ -390,26 +355,54 @@ const Profile: NextPage = (props) => {
               </Card>
 
               <Tabs defaultActiveKey="1">
-                <Tabs.Tab title="Espresso" key="1">
-                  1
+                <Tabs.Tab title="Public Feed" key="1">
+                  <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
+                    <StatusUpdateForm />
+                    <FlatFeed
+                      notify
+                      feedGroup="user"
+                      Activity={(props) => {
+                        let activity;
+                        if (props.activity?.actor?.data) {
+                          activity = {
+                            activity: {
+                              //give
+                              ...props.activity,
+                              actor: {
+                                data: {
+                                  name: props.activity.actor.id,
+                                },
+                              },
+                            },
+                          } as ActivityProps;
+                        }
+
+                        return (
+                          <Activity
+                            {...props}
+                            // data={{ name: props.activity.actor.data.id }}
+                            activity={activity?.activity || props.activity}
+                            Footer={() => (
+                              <div style={{ padding: "8px 16px" }}>
+                                <LikeButton {...props} />
+                                <CommentField
+                                  activity={props.activity}
+                                  onAddReaction={props.onAddReaction}
+                                />
+                                <CommentList activityId={props.activity.id} />
+                              </div>
+                            )}
+                          />
+                        );
+                      }}
+                    />
+                  </StreamApp>
                 </Tabs.Tab>
-                <Tabs.Tab title="Coffee Latte" key="2">
+                <Tabs.Tab title="Private Feed" key="2">
                   2
                 </Tabs.Tab>
-                <Tabs.Tab title="Cappuccino" key="3">
+                <Tabs.Tab title="Videos" key="3">
                   3
-                </Tabs.Tab>
-                <Tabs.Tab title="Americano" key="4">
-                  4
-                </Tabs.Tab>
-                <Tabs.Tab title="Flat White" key="5">
-                  5
-                </Tabs.Tab>
-                <Tabs.Tab title="Caramel Macchiato" key="6">
-                  6
-                </Tabs.Tab>
-                <Tabs.Tab title="Cafe Mocha" key="7">
-                  7
                 </Tabs.Tab>
               </Tabs>
             </>
@@ -455,48 +448,6 @@ const Profile: NextPage = (props) => {
               </Form.Item>
             </Form>
           )}
-
-          <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
-            <StatusUpdateForm />
-            <FlatFeed
-              notify
-              feedGroup="user"
-              Activity={(props) => {
-                let activity;
-                if (props.activity?.actor?.data) {
-                  activity = {
-                    activity: {
-                      //give
-                      ...props.activity,
-                      actor: {
-                        data: {
-                          name: props.activity.actor.id,
-                        },
-                      },
-                    },
-                  } as ActivityProps;
-                }
-
-                return (
-                  <Activity
-                    {...props}
-                    // data={{ name: props.activity.actor.data.id }}
-                    activity={activity?.activity || props.activity}
-                    Footer={() => (
-                      <div style={{ padding: "8px 16px" }}>
-                        <LikeButton {...props} />
-                        <CommentField
-                          activity={props.activity}
-                          onAddReaction={props.onAddReaction}
-                        />
-                        <CommentList activityId={props.activity.id} />
-                      </div>
-                    )}
-                  />
-                );
-              }}
-            />
-          </StreamApp>
         </main>
       </div>
     </>

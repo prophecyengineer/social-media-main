@@ -29,7 +29,6 @@ const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 const Notification: NextPage = () => {
   const { user } = useUserState();
 
-  console.log("user notify", user);
   // const session = useSession();
   // const userToken = session.data?.user?.userToken;
   // const username = session.data?.user?.username;
@@ -48,8 +47,8 @@ const Notification: NextPage = () => {
 
     return (
       <div>
-        <h2>{user.data.name} </h2>
-        <p>{user.data.bio} </p>
+        <h2>{user?.data?.name} </h2>
+        <p>{user?.data?.bio} </p>
         {/* <h5>{`Hey ${user.name}, username of ${user.username}, bio says ${user.bio}, and are they active? ${user.isActive} `}</h5> */}
         {/* <button
           onClick={() => {
