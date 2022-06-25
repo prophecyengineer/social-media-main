@@ -48,7 +48,8 @@ const Notification: NextPage = () => {
 
     return (
       <div>
-        <h2>walkin here </h2>
+        <h2>{user.data.name} </h2>
+        <p>{user.data.bio} </p>
         {/* <h5>{`Hey ${user.name}, username of ${user.username}, bio says ${user.bio}, and are they active? ${user.isActive} `}</h5> */}
         {/* <button
           onClick={() => {

@@ -10,6 +10,12 @@ const UserStateContext = createContext({
 
 export function UserProvider({ children }) {
   //   const session = useSession();
+  const stream = require("getstream");
+  const userToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoicGVhY2gifQ.o_kibyAOhWH-FHLalIy3RAreRvH7KvE2_IEVGPpJqFI";
+  const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
+  const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
+  const client = stream.connect(apiKey, userToken, appId);
 
   const [user, setUser] = useState();
 
@@ -31,15 +37,6 @@ export function UserProvider({ children }) {
   //     setUser(userWithAvatarFallback);
   //     setStatus('loaded');
   //     cache[token] = userWithAvatarFallback;
-  // }
-  //get user from stream
-  // const getUser = async function getstreamUser(userName = "peach") {
-  //     try {
-  //         const { full } = await client.user(userName).get();
-  //         setUser(full);
-  //     } catch (err) {
-  //         console.log(err)
-  //     }
   // }
 
   // if session get session and user details
@@ -65,22 +62,29 @@ export function UserProvider({ children }) {
   //     bio: "heyhye bio made by me",
   //   });
 
-  async function getUser() {
+  const [streamUser, setStreamUser] = useState();
+
+  //get user from stream
+
+  async function getUser(userName = "peach") {
+    try {
+      const userFallback = await client.user(userName).get();
+      setUser(userFallback);
+
+      //   const { full } = await client.user(userName).get();
+      //   setStreamUser(full);
+      console.log("user from stream", userFallback);
+    } catch (err) {
+      console.log(err);
+    }
+
+    //get user from stream
+
     //    const result = await fetch("/api/get-user-info", {
     //      headers: {
     //        Authorization: `Bearer ${token}`,
     //      },
     //    }).then((response) => response.json());
-
-    const userFallback = {
-      name: "John",
-      username: "johndoe",
-      bio: " by bio me",
-      isActive: 1,
-      email: "bobbon@example.com",
-    };
-
-    setUser(userFallback);
   }
 
   useEffect(() => {
