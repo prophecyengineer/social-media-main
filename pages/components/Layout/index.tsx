@@ -85,7 +85,7 @@ export default function Layout(props) {
   );
 
   return (
-    <>
+    <div>
       {mounted && (
         <div>
           <Desktop>
@@ -129,7 +129,7 @@ export default function Layout(props) {
           </TabBar>
         </Card>
       </div>
-    </>
+    </div>
   );
 }
 

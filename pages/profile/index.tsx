@@ -56,15 +56,15 @@ const Profile: NextPage = (props) => {
 
   const session = useSession();
   const userName = session?.data?.user?.username;
-  const handleNameChange = (value) => {
+  const handleNameChange = (value: React.SetStateAction<never[]>) => {
     setName(value);
   };
 
-  const handleBioChange = (value) => {
+  const handleBioChange = (value: React.SetStateAction<never[]>) => {
     setBio(value);
   };
 
-  const handleImageChange = (value) => {
+  const handleImageChange = (value: React.SetStateAction<never[]>) => {
     setImage(value);
   };
   // function to to change fields to be editable
@@ -121,7 +121,7 @@ const Profile: NextPage = (props) => {
     const userOne = client.feed("user", client.userId);
     userOne
       .followers()
-      .then((res) => {
+      .then((res: { results: string | any[] }) => {
         let List = [];
         for (let i = 0; i < res.results.length; i++) {
           const user = res.results[i].feed_id.slice(5);
@@ -129,7 +129,7 @@ const Profile: NextPage = (props) => {
         }
         setFollowerListState(List);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -139,7 +139,7 @@ const Profile: NextPage = (props) => {
     const userOne = client.feed("home", client.userId);
     userOne
       .following()
-      .then((res) => {
+      .then((res: { results: string | any[] }) => {
         let List = [];
         for (let i = 0; i < res.results.length; i++) {
           const user = res.results[i].target_id.slice(5);
@@ -148,20 +148,20 @@ const Profile: NextPage = (props) => {
 
         setFollowingListState(List);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
   // function to follow a user from the main activity in middle of page
-  const followerUser = (userToFollow) => {
+  const followerUser = (userToFollow: any) => {
     const userOne = client.feed("home", client.userId);
     userOne.follow("user", userToFollow);
     UserFollowing();
     UserFollowers();
   };
 
-  const unfollowerUser = (userToUnFollow) => {
+  const unfollowerUser = (userToUnFollow: any) => {
     const userOne = client.feed("home", client.userId);
     userOne.unfollow("user", userToUnFollow, { keepHistory: true });
     UserFollowing();

@@ -19,7 +19,15 @@ import {
 } from "react-activity-feed";
 import stream from "getstream";
 import { signOut, useSession } from "next-auth/react";
-import { Form, Input, Button, Dialog, Card } from "antd-mobile";
+import {
+  Form,
+  Input,
+  Button,
+  Dialog,
+  Card,
+  Divider,
+  Avatar,
+} from "antd-mobile";
 
 const Home = () => {
   const session = useSession();
@@ -69,6 +77,9 @@ const Home = () => {
                     actor: {
                       data: {
                         name: props.activity.actor.id,
+
+                        //need to assign the profileImage as user?.image in getstream
+                        profileImage: props?.activity?.actor?.data?.image,
                       },
                     },
                   },
@@ -76,69 +87,59 @@ const Home = () => {
               }
 
               return (
-                <Activity
-                  {...props}
-                  // data={{ name: props.activity.actor.data.id }}
-                  activity={activity?.activity || props.activity}
-                  HeaderRight={() => (
-                    <>
-                      <FollowButton />
-                      {followingList.includes(username) ? (
-                        <FollowButton
-                          followed
-                          onClick={() => {
-                            const currentUser = client.feed(
-                              "home",
-                              username,
-                              userToken
-                            );
-                            currentUser.follow(
-                              "user",
-                              props.activity.actor.id,
-                              userToken
-                            );
-                          }}
+                <>
+                  <Activity
+                    onClickUser={() => console.log("im clicking user ")}
+                    className="userCard"
+                    {...props}
+                    // data={{ name: props.activity.actor.data.id }}
+                    activity={activity?.activity || props.activity}
+                    // Card={() => <Card>{activity.object}</Card>}
+                    // Content={({ activity }) => <Card>{activity.object}</Card>}
+                    // Header={(activity) => (
+                    //   <>
+                    //     {/* <Avatar src={props?.activity?.actor?.image} /> */}
+                    //   </>
+                    // )}
+                    HeaderRight={() => (
+                      <>
+                        {followingListState.includes(
+                          props.activity.actor.id
+                        ) ? (
+                          <Button
+                            onClick={() =>
+                              unfollowerUser(props.activity.actor.id)
+                            }
+                          >
+                            following
+                          </Button>
+                        ) : (
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              followerUser(props.activity.actor.id)
+                            }
+                          >
+                            follow
+                          </Button>
+                        )}
+                      </>
+                    )}
+                    Footer={() => (
+                      <div style={{ padding: "8px 16px" }}>
+                        <LikeButton {...props} />
+
+                        <CommentField
+                          activity={props.activity}
+                          onAddReaction={props.onAddReaction}
                         />
-                      ) : (
-                        <FollowButton
-                          onClick={() => {
-                            const currentUser = client.feed(
-                              "home",
-                              username,
-                              userToken
-                            );
-                            currentUser.unfollow(
-                              "user",
-                              props.activity.actor.id,
-                              userToken
-                            );
-                          }}
-                        />
-                      )}
-                    </>
-                    // <Card>
-                    //
-                    //   >
-                    //     follow {props.activity.actor.id}
-                    //   </Button>
-                    //   <Button
-                    //
-                    //   >
-                    //     unfollow {props.activity.actor.id}
-                    //   </Button>
-                    // </Card>
-                  )}
-                  Footer={() => (
-                    <div style={{ padding: "8px 16px" }}>
-                      <LikeButton {...props} />
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
-                      <CommentList activityId={props.activity.id} />
-                    </div>
-                  )}
-                />
+
+                        <CommentList activityId={props.activity.id} />
+                      </div>
+                    )}
+                  />
+                  <Divider />
+                </>
               );
             }}
           />

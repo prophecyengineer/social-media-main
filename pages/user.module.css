@@ -1,0 +1,45 @@
+.title {
+  overflow: auto;
+}
+
+.avatar {
+  margin-top: -85px;
+}
+
+.title {
+  margin-bottom: -20px;
+}
+
+.hero {
+  max-height: 170px;
+  overflow: hidden;
+  width: 120%;
+  margin-left: -35px;
+  background-size: contain;
+
+  background-position: center bottom;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  display: block;
+
+  top: 0;
+
+  border-radius: 0 0 50% 50%/0 0 100% 100%;
+}
+.heroWrapper {
+  justify-content: center;
+  margin-top: -50px;
+  width: 100vw;
+  overflow: hidden;
+  align-items: center;
+}
+
+.smallButton {
+  font-size: 13px !important;
+  width: 100%;
+  color: rgb(109, 109, 109);
+}
+
+.mediumButton {
+  width: 100% !important;
+}
