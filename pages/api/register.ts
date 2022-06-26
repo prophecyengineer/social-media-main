@@ -34,6 +34,12 @@ export default async (req, res) => {
       // ensure the user data is stored on Stream
 
 
+
+
+      // client.user(username).update({ name: name, bio: "something about me", image: "http://placekitten.com/200/300" });
+
+      // console.log('did the getstream bit')
+
       await prisma.user.create({
         data: {
           name: name,

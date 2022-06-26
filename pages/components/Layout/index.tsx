@@ -15,18 +15,22 @@ import {
   Tabs,
   Dropdown,
   ActionSheet,
+  FloatingBubble,
+  Popup,
 } from "antd-mobile";
 import {
   LocationOutline,
   GlobalOutline,
   BellOutline,
   UserCircleOutline,
+  AddCircleOutline,
 } from "antd-mobile-icons";
 import type {
   Action,
   ActionSheetShowHandler,
 } from "antd-mobile/es/components/action-sheet";
 import { useState, useEffect } from "react";
+import MakePost from "../MakePost";
 
 export default function Layout(props) {
   const session = useSession();
@@ -37,6 +41,37 @@ export default function Layout(props) {
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
   // const client = stream.connect(apiKey, userToken, appId);
+
+  const MakePostBubble = () => {
+    const [visible, setVisible] = useState(false);
+    const onClick = () => {
+      setVisible(true);
+    };
+    return (
+      <div>
+        <FloatingBubble
+          style={{
+            "--initial-position-bottom": "94px",
+            "--initial-position-right": "24px",
+            "--edge-distance": "24px",
+          }}
+          onClick={onClick}
+        >
+          <AddCircleOutline font-size={72} />
+        </FloatingBubble>
+        <Popup
+          visible={visible}
+          onMaskClick={() => {
+            setVisible(false);
+          }}
+          bodyStyle={{ height: "60vh" }}
+        >
+          <MakePost />
+        </Popup>
+      </div>
+    );
+  };
+
   const { pathname } = location;
   const setRouteActive = (value: string) => {
     router.push(value);
@@ -94,6 +129,7 @@ export default function Layout(props) {
         </div>
       )}
 
+      <MakePostBubble />
       <NavBar
         className={styles.top}
         right={right}
@@ -114,7 +150,6 @@ export default function Layout(props) {
               icon={<GlobalOutline />}
               title="explore"
             />
-            <TabBar.Item key="/" icon={<AppOutline />} title="post" />
             <TabBar.Item
               key="/notification"
               icon={<BellOutline />}

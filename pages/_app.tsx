@@ -11,11 +11,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <SessionProvider session={pageProps.session}>
-      <UserProvider>
-        <Wrapper>
+      <Wrapper>
+        <UserProvider>
           <Component {...pageProps} />
-        </Wrapper>
-      </UserProvider>
+        </UserProvider>
+      </Wrapper>
     </SessionProvider>
   );
 }

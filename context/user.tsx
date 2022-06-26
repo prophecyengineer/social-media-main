@@ -34,12 +34,13 @@ export function UserProvider({ children }) {
     }
   }
 
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
   const state = {
     user,
   };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <UserStateContext.Provider value={state}>

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 import type { NextPage } from "next";
 import styles from "./Profile.module.css";
-import * as React from "react";
+import React, { useRef } from "react";
 import { useSession } from "next-auth/react";
 import {
   Modal,
@@ -18,11 +18,14 @@ import {
   List,
   Popup,
   Badge,
+  ActionSheet,
+  Toast,
   TabBar,
   Divider,
   FloatingPanel,
   CapsuleTabs,
 } from "antd-mobile";
+import { MoreOutline } from "antd-mobile-icons";
 import "react-activity-feed/dist/index.css";
 import {
   StreamApp,
@@ -40,22 +43,19 @@ import { useState, useEffect } from "react";
 import { useUserState } from "../../context/user";
 
 const axios = require("axios").default;
-const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
-const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 
 const Profile: NextPage = (props) => {
   const [followingListState, setFollowingListState] = useState([]);
   const [followerListState, setFollowerListState] = useState([]);
   const [readOnlyEditState, setReadOnlyEditState] = useState(true);
-  const [viewPanelState, setViewPanelState] = useState("activityFeed");
-  const [activitiesState, setActivitiesState] = useState([]);
   const [name, setName] = useState([]);
   const [bio, setBio] = useState([]);
   const [image, setImage] = useState([]);
   const { user } = useUserState();
-
+  console.log("user", user);
   const session = useSession();
-  const userName = session?.data?.user?.username;
+  console.log("session", session);
+
   const handleNameChange = (value: React.SetStateAction<never[]>) => {
     setName(value);
   };
@@ -168,26 +168,6 @@ const Profile: NextPage = (props) => {
     UserFollowers();
   };
 
-  const tabs = [
-    {
-      key: "home",
-      title: "Followers",
-      badge: Badge.dot,
-    },
-    {
-      key: "todo",
-      title: "following",
-      badge: "5",
-    },
-    {
-      key: "message",
-      title: "posts",
-      // icon: (active: boolean) =>
-      // active ? <MessageFill /> : <MessageOutline />,
-      badge: "99+",
-    },
-  ];
-
   const [followersVisible, setFollowersVisible] = useState(false);
 
   const [followingVisible, setFollowingVisible] = useState(false);
@@ -233,7 +213,6 @@ const Profile: NextPage = (props) => {
                   </Button>
                 </Grid.Item>
                 <Grid.Item>
-                  {" "}
                   <div>
                     <>
                       <Button
@@ -407,7 +386,6 @@ const Profile: NextPage = (props) => {
               <Tabs defaultActiveKey="1">
                 <Tabs.Tab title="Public Feed" key="1">
                   <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
-                    <StatusUpdateForm />
                     <FlatFeed
                       notify
                       feedGroup="user"
@@ -420,7 +398,7 @@ const Profile: NextPage = (props) => {
                               ...props.activity,
                               actor: {
                                 data: {
-                                  name: props.activity.actor.id,
+                                  name: props.activity.actor.data.name,
                                 },
                               },
                             },
@@ -432,10 +410,51 @@ const Profile: NextPage = (props) => {
                             {...props}
                             // data={{ name: props.activity.actor.data.id }}
                             activity={activity?.activity || props.activity}
+                            Header={() => (
+                              <>
+                                <List>
+                                  <List.Item
+                                    key="1"
+                                    extra={
+                                      <Button
+                                        onClick={async () => {
+                                          const username = user.id;
+                                          const client = stream.connect(
+                                            apiKey,
+                                            userToken,
+                                            appId
+                                          );
+
+                                          const feed = client.feed(
+                                            "user",
+                                            username
+                                          );
+
+                                          const removed =
+                                            await feed.removeActivity(
+                                              props.activity.id
+                                            );
+                                          console.log("removed", removed);
+                                        }}
+                                      >
+                                        <MoreOutline />
+                                      </Button>
+                                    }
+                                    prefix={
+                                      <Avatar
+                                        src={props.activity.actor.data.image}
+                                      />
+                                    }
+                                    description={props.activity.actor.id}
+                                  >
+                                    {props.activity.actor.data.name}
+                                  </List.Item>
+                                </List>
+                              </>
+                            )}
                             Footer={() => (
                               <div style={{ padding: "8px 16px" }}>
                                 <LikeButton {...props} />
-                                <CommentField activity={props.activity} />
                                 <CommentList activityId={props.activity.id} />
                               </div>
                             )}

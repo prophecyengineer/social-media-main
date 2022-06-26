@@ -13,6 +13,7 @@ import {
   Grid,
   Divider,
 } from "antd-mobile";
+import { prisma, PrismaClient } from "@prisma/client";
 const axios = require("axios").default;
 
 export default function Register(props) {
@@ -29,6 +30,20 @@ export default function Register(props) {
   const handleUsernameChange = (value) => {
     setUsername(value);
   };
+
+  const checkExisting = async () => {
+    const isTrue = await axios.post("/api/checkExisting", {
+      query: { username },
+    });
+
+    if (isTrue?.data?.result !== null) {
+      console.log("i found a user");
+
+      // do login stuff
+    }
+    console.log(isTrue?.data?.result);
+  };
+
   const handleEmailChange = (value) => {
     setEmail(value);
   };
@@ -37,13 +52,6 @@ export default function Register(props) {
   };
 
   const onFinish = async (values) => {
-    // const data = {
-    //   name: name,
-    //   username: username,
-    //   email: email,
-    //   password: password,
-    // };
-
     await axios.post("/api/register", values);
     signIn("credentials", {
       username,
@@ -63,6 +71,22 @@ export default function Register(props) {
     <>
       <Card>
         <Form
+          onFinish={checkExisting}
+          footer={
+            <Button block type="submit" color="primary" size="large">
+              Check Availability
+            </Button>
+          }
+        >
+          <Input
+            type="text"
+            name="username"
+            value={username}
+            onChange={handleUsernameChange}
+            placeholder="username"
+          />
+        </Form>
+        {/* <Form
           name="form"
           onFinish={onFinish}
           footer={
@@ -75,7 +99,6 @@ export default function Register(props) {
 
           <Form.Item
             rules={[{ required: true }]}
-            name="name"
             label="name"
             help="please type your name : John Doe "
           >
@@ -88,12 +111,12 @@ export default function Register(props) {
           </Form.Item>
           <Form.Item
             rules={[{ required: true }]}
-            name="username"
             label="username"
             help="please type "
           >
             <Input
               type="text"
+              name="username"
               value={username}
               onChange={handleUsernameChange}
               placeholder="username"
@@ -101,7 +124,6 @@ export default function Register(props) {
           </Form.Item>
           <Form.Item
             rules={[{ required: true }]}
-            name="email"
             label="email"
             help="please type your email address "
           >
@@ -114,7 +136,6 @@ export default function Register(props) {
           </Form.Item>
           <Form.Item
             rules={[{ required: true }]}
-            name="password"
             label="password"
             help="please type "
           >
@@ -125,7 +146,7 @@ export default function Register(props) {
               placeholder="password"
             />
           </Form.Item>
-        </Form>
+        </Form> */}
 
         <Divider />
       </Card>
