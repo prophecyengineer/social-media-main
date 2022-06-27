@@ -92,17 +92,17 @@ export default function Register(props) {
           <Step title="3" description="profile" />
         </Steps>
         <Space direction="vertical" block>
-          <Swiper allowTouchMove={false} ref={ref}>
-            <Swiper.Item key={1}>
-              <Form
-                name="form"
-                onFinish={onFinish}
-                footer={
-                  <Button block type="submit" color="primary" size="large">
-                    Submit
-                  </Button>
-                }
-              >
+          <Form
+            name="form"
+            onFinish={onFinish}
+            footer={
+              <Button block type="submit" color="primary" size="large">
+                Submit
+              </Button>
+            }
+          >
+            <Swiper allowTouchMove={false} ref={ref}>
+              <Swiper.Item key={1}>
                 <Form.Header>Register</Form.Header>
                 <Form.Item
                   extra={
@@ -127,64 +127,61 @@ export default function Register(props) {
                     placeholder="username"
                   />
                 </Form.Item>
-                <Form.Item
-                  rules={[{ required: true }]}
-                  label="name"
-                  help="please type your name : John Doe "
+              </Swiper.Item>
+              <Swiper.Item key={2}>
+                <div
+                  onClick={() => {
+                    Toast.show(`你点击了卡片 `);
+                  }}
                 >
-                  <Input
-                    type="text"
-                    value={name}
-                    onChange={handleNameChange}
-                    placeholder="name"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  rules={[{ required: true }]}
-                  label="email"
-                  help="please type your email address "
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    label="email"
+                    help="please type your email address "
+                  >
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      placeholder="email"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    label="password"
+                    help="please type "
+                  >
+                    <Input
+                      type="password"
+                      value={password}
+                      onChange={handlePasswordChange}
+                      placeholder="password"
+                    />
+                  </Form.Item>
+                </div>
+              </Swiper.Item>
+              <Swiper.Item key={3}>
+                <div
+                  onClick={() => {
+                    Toast.show(`你点击了卡片 `);
+                  }}
                 >
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    placeholder="email"
-                  />
-                </Form.Item>
-                <Form.Item
-                  rules={[{ required: true }]}
-                  label="password"
-                  help="please type "
-                >
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    placeholder="password"
-                  />
-                </Form.Item>
-              </Form>
-            </Swiper.Item>
-            <Swiper.Item key={2}>
-              <div
-                onClick={() => {
-                  Toast.show(`你点击了卡片 `);
-                }}
-              >
-                <h2>hey next part</h2>
-              </div>
-            </Swiper.Item>
-            <Swiper.Item key={3}>
-              <div
-                onClick={() => {
-                  Toast.show(`你点击了卡片 `);
-                }}
-              >
-                <h2>hey last part</h2>
-              </div>
-            </Swiper.Item>
-          </Swiper>
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    label="name"
+                    help="please type your name : John Doe "
+                  >
+                    <Input
+                      type="text"
+                      value={name}
+                      onChange={handleNameChange}
+                      placeholder="name"
+                    />
+                  </Form.Item>
+                </div>
+              </Swiper.Item>
+            </Swiper>
+          </Form>
           <Space>
             <Button
               onClick={() => {
