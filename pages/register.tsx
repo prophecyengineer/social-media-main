@@ -10,6 +10,7 @@ import {
   Dialog,
   Space,
   Card,
+  Popover,
   Grid,
   Divider,
 } from "antd-mobile";
@@ -40,10 +41,10 @@ export default function Register(props) {
     if (isTrue?.data?.result !== null) {
       console.log("i found a user");
 
-      setUsernameChecker("this username in use");
+      setUsernameChecker("this one not free");
       // do login stuff
     } else {
-      setUsernameChecker("this username is free to use");
+      setUsernameChecker("this one ok");
     }
     console.log(isTrue?.data?.result);
   };
@@ -75,24 +76,25 @@ export default function Register(props) {
     <>
       <Card>
         <Form
-          onFinish={checkExisting}
+          name="form"
+          onFinish={onFinish}
           footer={
             <Button block type="submit" color="primary" size="large">
-              Check Availability
+              Submit
             </Button>
           }
         >
+          <Form.Header>Register</Form.Header>
           <Form.Item
             extra={
-              <Button
-                block
-                type="submit"
-                onClick={checkExisting}
-                color="primary"
-                size="small"
+              <Popover
+                content={usernameChecker}
+                trigger="click"
+                placement="top"
+                defaultVisible
               >
-                Check Availability
-              </Button>
+                <Button onClick={checkExisting}> Check Availability </Button>
+              </Popover>
             }
           >
             <Input
@@ -103,19 +105,6 @@ export default function Register(props) {
               placeholder="username"
             />
           </Form.Item>
-          <p>{usernameChecker}</p>
-        </Form>
-        <Form
-          name="form"
-          onFinish={onFinish}
-          footer={
-            <Button block type="submit" color="primary" size="large">
-              Submit
-            </Button>
-          }
-        >
-          <Form.Header>Register</Form.Header>
-
           <Form.Item
             rules={[{ required: true }]}
             label="name"
@@ -128,19 +117,7 @@ export default function Register(props) {
               placeholder="name"
             />
           </Form.Item>
-          <Form.Item
-            rules={[{ required: true }]}
-            label="username"
-            help="please type "
-          >
-            <Input
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleUsernameChange}
-              placeholder="username"
-            />
-          </Form.Item>
+
           <Form.Item
             rules={[{ required: true }]}
             label="email"
