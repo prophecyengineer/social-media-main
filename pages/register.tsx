@@ -21,6 +21,7 @@ export default function Register(props) {
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [usernameChecker, setUsernameChecker] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -39,7 +40,10 @@ export default function Register(props) {
     if (isTrue?.data?.result !== null) {
       console.log("i found a user");
 
+      setUsernameChecker("this username in use");
       // do login stuff
+    } else {
+      setUsernameChecker("this username is free to use");
     }
     console.log(isTrue?.data?.result);
   };
@@ -78,15 +82,30 @@ export default function Register(props) {
             </Button>
           }
         >
-          <Input
-            type="text"
-            name="username"
-            value={username}
-            onChange={handleUsernameChange}
-            placeholder="username"
-          />
+          <Form.Item
+            extra={
+              <Button
+                block
+                type="submit"
+                onClick={checkExisting}
+                color="primary"
+                size="small"
+              >
+                Check Availability
+              </Button>
+            }
+          >
+            <Input
+              type="text"
+              name="username"
+              value={username}
+              onChange={handleUsernameChange}
+              placeholder="username"
+            />
+          </Form.Item>
+          <p>{usernameChecker}</p>
         </Form>
-        {/* <Form
+        <Form
           name="form"
           onFinish={onFinish}
           footer={
@@ -146,7 +165,7 @@ export default function Register(props) {
               placeholder="password"
             />
           </Form.Item>
-        </Form> */}
+        </Form>
 
         <Divider />
       </Card>
