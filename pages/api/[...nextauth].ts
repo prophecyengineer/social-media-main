@@ -4,8 +4,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextApiRequest, NextApiResponse } from "next";
 let userAccount = null;
 
-
-
 const prisma = new PrismaClient();
 
 const bcrypt = require("bcrypt");

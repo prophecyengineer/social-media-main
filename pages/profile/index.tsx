@@ -209,7 +209,7 @@ const Profile: NextPage = (props) => {
                       setFollowingVisible(true);
                     }}
                   >
-                    followinssg {followingListState.length}
+                    following {followingListState.length}
                   </Button>
                 </Grid.Item>
                 <Grid.Item>

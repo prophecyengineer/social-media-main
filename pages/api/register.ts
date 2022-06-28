@@ -19,27 +19,27 @@ const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
+
+
   if (req.method === "POST") {
     const { name, username, email, password } = req.body;
 
+
     try {
+      console.log('usernmae in api', username)
+
+
       // makes a user in getstream
+
+
+
+      // console.log('username', name, username)
       let userToken = client.createUserToken(username);
+
       console.log("make a stream token with", username, userToken);
+
       const hash = await bcrypt.hash(password, 0);
-
-
-      // const newclient = stream.connect(apiKey, userToken, appId, { location: "dublin" });
-
-      // ensure the user data is stored on Stream
-
-
-
-
-      // client.user(username).update({ name: name, bio: "something about me", image: "http://placekitten.com/200/300" });
-
-      // console.log('did the getstream bit')
-
+      console.log('getting this far')
       await prisma.user.create({
         data: {
           name: name,
@@ -52,6 +52,20 @@ export default async (req, res) => {
           stripeToken: "",
         },
       });
+
+
+      // const newclient = stream.connect(apiKey, userToken, appId, { location: "dublin" });
+
+      // ensure the user data is stored on Stream
+
+
+
+
+      // client.user(username).update({ name: name, bio: "something about me", image: "http://placekitten.com/200/300" });
+
+      console.log('did the getstream bit')
+
+
 
 
 

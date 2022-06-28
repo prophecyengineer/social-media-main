@@ -32,6 +32,8 @@ export default async (req, res) => {
 
             client.user(username).update({ name: name, bio: bio, image: image });
 
+
+
             console.log('did the getstream bit')
 
             await prisma.user.update({
