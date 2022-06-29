@@ -102,12 +102,12 @@ export default function Register(props) {
     const data = {
       name: name,
       bio: bio,
-      image: image,
+      image: file,
       username: username,
       email: email,
       password: password,
     };
-    console.log("values", data);
+    console.log("values image too", data, file);
     await axios.post("/api/register", data);
     signIn("credentials", {
       username,
@@ -262,30 +262,11 @@ export default function Register(props) {
                         <input type="file" id="input" name="file" multiple />
                       </div>
                       <div>
-                        <button onClick={handleUpload}>Submit</button>
+                        <Button onClick={handleUpload}>Upload</Button>
                       </div>
                     </div>
-                    <ImageUploader
-                      value={image}
-                      onChange={handleImageChange}
-                      upload={handleUpload}
-                    >
-                      <div
-                        style={{
-                          width: 80,
-                          height: 80,
-                          borderRadius: 40,
-                          backgroundColor: "#f5f5f5",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          color: "#999999",
-                        }}
-                      >
-                        <PictureOutline style={{ fontSize: 32 }} />
-                      </div>
-                    </ImageUploader>
                   </>
+                  <Space />
 
                   <Button block type="submit" color="primary" size="large">
                     Submit

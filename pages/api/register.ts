@@ -22,7 +22,7 @@ export default async (req, res) => {
 
 
   if (req.method === "POST") {
-    const { name, username, email, password } = req.body;
+    const { name, username, email, password, image, bio } = req.body;
 
 
     try {
@@ -47,8 +47,8 @@ export default async (req, res) => {
           email: email,
           password: hash,
           userToken: userToken,
-          bio: "something about me",
-          image: "http://placekitten.com/200/300",
+          bio: bio,
+          image: image,
           stripeToken: "",
         },
       });
@@ -61,7 +61,7 @@ export default async (req, res) => {
 
 
 
-      // client.user(username).update({ name: name, bio: "something about me", image: "http://placekitten.com/200/300" });
+      client.user(username).update({ name: name, bio: bio, image: image });
 
       console.log('did the getstream bit')
 
