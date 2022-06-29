@@ -66,19 +66,20 @@ export default function Register(props) {
       maxRetries: 3,
     });
 
-    console.log(rootCid);
+    setFile(rootCid);
+    // console.log("rootCID", rootCid);
 
-    const res = await client.get(rootCid);
-    const files = await res.files();
-    console.log(files);
-    const url = URL.createObjectURL(files[0]);
-    console.log(url);
-    setFile(url);
+    // const res = await client.get(rootCid);
+    // const files = await res.files();
+    // console.log("files", files);
+    // const url = URL.createObjectURL(files[0]);
+    // console.log("url", url);
+    // setFile(url);
 
-    return {
-      url: url,
-    };
+    return {};
   }
+
+  console.log("outside rootCID .ipfs.dweb.link", file);
 
   const handleNameChange = (value) => {
     setName(value);
@@ -99,6 +100,7 @@ export default function Register(props) {
   };
 
   const onFinish = async () => {
+    console.log("gfile", file);
     const data = {
       name: name,
       bio: bio,
@@ -254,7 +256,7 @@ export default function Register(props) {
                   </Form.Item>
 
                   <>
-                    <div className="App">
+                    <div>
                       <img alt="image" src={file} />
 
                       <div>

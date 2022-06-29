@@ -26,7 +26,6 @@ export default async (req, res) => {
 
 
     try {
-      console.log('usernmae in api', username)
 
 
       // makes a user in getstream
