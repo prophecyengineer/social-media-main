@@ -19,7 +19,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/components/Wrapper"
+    "pages/components/Wrapper",
+    "pages/components/utils"
   ],
   "exclude": ["node_modules"]
 }

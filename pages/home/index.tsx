@@ -37,7 +37,6 @@ const Home = () => {
   const username = session.data?.user?.username;
   const [followingListState, setFollowingListState] = useState([]);
 
-
   // Connection to client for getStream.io
   // const client = stream.connect(apiKey, userToken, appId);
 

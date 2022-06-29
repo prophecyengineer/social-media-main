@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import styles from "./user.module.css";
 import * as React from "react";
 import { useRouter } from "next/router";
+import { prisma, PrismaClient } from "@prisma/client";
 
 import { useSession } from "next-auth/react";
 import {
@@ -41,6 +42,7 @@ import {
 import { useState, useEffect } from "react";
 import { useUserState } from "../context/user";
 import router from "next/router";
+import stream from "stream";
 
 const axios = require("axios").default;
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
@@ -50,15 +52,14 @@ const PublicProfile: NextPage = (props) => {
   const [followingListState, setFollowingListState] = useState([]);
   const [followerListState, setFollowerListState] = useState([]);
   const [readOnlyEditState, setReadOnlyEditState] = useState(true);
-  const [viewPanelState, setViewPanelState] = useState("activityFeed");
-  const [activitiesState, setActivitiesState] = useState([]);
-  const [name, setName] = useState([]);
-  const [bio, setBio] = useState([]);
-  const [image, setImage] = useState([]);
+
   const { user } = useUserState();
   const query = router.query;
-  const uid = query.uid;
+  // const uid = query.uid;
 
+  // console.log("thing i queried", query.user);
+
+  // i want to see a certain persons page
   //got to go get user from query
 
   const session = useSession();
@@ -79,6 +80,24 @@ const PublicProfile: NextPage = (props) => {
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
   const client = stream.connect(apiKey, userToken, appId);
+
+  // const [user, setUser] = useState();
+  const [fetchedData, setFetchedData] = useState([]);
+
+  //takes a few refreshes to load in
+  useEffect(() => {
+    const getData = async () => {
+      const data = await client.user(query.user).get();
+      setFetchedData(data);
+    };
+    getData();
+  }, []);
+  //load once only
+
+  console.log("fetchedData", fetchedData);
+
+  const searchUserToken = fetchedData?.token;
+  // console.log("user", user);
 
   // loading activities and following stats from getStream.io
   useEffect(() => {
@@ -163,17 +182,16 @@ const PublicProfile: NextPage = (props) => {
             <Space block justify="center">
               <Avatar
                 className={styles.avatar}
-                src={user?.data?.image}
+                src={fetchedData?.data?.image}
                 style={{ "--size": "120px" }}
               ></Avatar>
             </Space>
 
             <Space block justify="center" className={styles.title}>
-              <h1>User Page</h1>
-              <h2>uid: {uid}</h2>
+              <h1>{fetchedData?.data?.name}</h1>
             </Space>
             <Space block justify="center">
-              <p>{user?.data?.bio}</p>
+              <p>{fetchedData?.data?.bio}</p>
             </Space>
             <Grid columns={3} gap={2}>
               <Grid.Item>
@@ -288,7 +306,13 @@ const PublicProfile: NextPage = (props) => {
 
             <Tabs defaultActiveKey="1">
               <Tabs.Tab title="Public Feed" key="1">
-                <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
+                <StreamApp
+                  apiKey={apiKey}
+                  appId={appId}
+                  token={
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZGVyZWsifQ.U2Kh4kK3uC4wtkajqMB4coM7lViyex2AF_uHjHds9sA"
+                  }
+                >
                   <FlatFeed
                     notify
                     feedGroup="user"
@@ -339,5 +363,10 @@ const PublicProfile: NextPage = (props) => {
     </>
   );
 };
+
+// export async function getServerSideProps() {
+//   //primsa go search for given query.user
+
+// }
 
 export default PublicProfile;

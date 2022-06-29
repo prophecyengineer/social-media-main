@@ -73,11 +73,7 @@ export default function Register(props) {
     await setImage(
       "https://" + `${rootCid}` + ".ipfs.dweb.link/" + `${imageData}`
     );
-    // const files = await res.files();
-    // console.log("files", files);
-    // const url = URL.createObjectURL(files[0]);
-    // console.log("url", url);
-    // setFile(url);
+
     console.log("full res");
     console.log("full image", image);
 
