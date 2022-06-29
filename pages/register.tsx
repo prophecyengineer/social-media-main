@@ -34,8 +34,6 @@ export async function mockUploadFail() {
 }
 
 export default function Register(props) {
-  const [image, setImage] = useState<ImageUploadItem[]>([]);
-
   const router = useRouter();
   const ref = useRef<SwiperRef>(null);
 
@@ -54,11 +52,14 @@ export default function Register(props) {
 
   const client = new Web3Storage({ token: apiToken });
   const [file, setFile] = useState("");
+  const [image, setImage] = useState("");
 
   async function handleUpload(file: File) {
     await sleep(3000);
 
-    console.log(document.getElementById("input").files[0]);
+    const imageData = document.getElementById("input").files[0].name;
+
+    console.log("first part", imageData.name);
     var fileInput = document.getElementById("input");
 
     const rootCid = await client.put(fileInput.files, {
@@ -67,20 +68,25 @@ export default function Register(props) {
     });
 
     setFile(rootCid);
-    // console.log("rootCID", rootCid);
+    console.log("rootCID", rootCid);
 
-    // const res = await client.get(rootCid);
+    await setImage(
+      "https://" + `${rootCid}` + ".ipfs.dweb.link/" + `${imageData}`
+    );
     // const files = await res.files();
     // console.log("files", files);
     // const url = URL.createObjectURL(files[0]);
     // console.log("url", url);
     // setFile(url);
+    console.log("full res");
+    console.log("full image", image);
 
-    return {};
+    return { image };
   }
 
-  console.log("outside rootCID .ipfs.dweb.link", file);
+  // console.log("FULL iMG URL", `https://${file}.ipfs.dweb.link/${imageData}`);
 
+  console.log("outside image", image);
   const handleNameChange = (value) => {
     setName(value);
   };
@@ -100,16 +106,15 @@ export default function Register(props) {
   };
 
   const onFinish = async () => {
-    console.log("gfile", file);
     const data = {
       name: name,
       bio: bio,
-      image: file,
+      image: image,
       username: username,
       email: email,
       password: password,
     };
-    console.log("values image too", data, file);
+
     await axios.post("/api/register", data);
     signIn("credentials", {
       username,
@@ -146,12 +151,6 @@ export default function Register(props) {
       setUsernameChecker("this username is free to use");
     }
     console.log(isTrue?.data?.result);
-  };
-
-  const handleImageChange = (value) => {
-    setImage(value);
-
-    console.log("image", image);
   };
 
   return (
@@ -257,7 +256,7 @@ export default function Register(props) {
 
                   <>
                     <div>
-                      <img alt="image" src={file} />
+                      <img alt="image" src={image} />
 
                       <div>
                         <label>Choose file to upload</label>
