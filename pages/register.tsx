@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
@@ -12,22 +12,81 @@ import {
   Card,
   Grid,
   Divider,
+  ImageUploader,
+  Popover,
+  Swiper,
+  Steps,
+  Toast,
+  TextArea,
 } from "antd-mobile";
+import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { prisma, PrismaClient } from "@prisma/client";
+import { PictureOutline } from "antd-mobile-icons";
+import { SwiperRef } from "antd-mobile/es/components/swiper";
 const axios = require("axios").default;
+const { Step } = Steps;
+import { sleep } from "antd-mobile/es/utils/sleep";
+import { Web3Storage } from "web3.storage";
+
+export async function mockUploadFail() {
+  await sleep(3000);
+  throw new Error("Fail to upload");
+}
 
 export default function Register(props) {
-  const router = useRouter();
+  const [image, setImage] = useState<ImageUploadItem[]>([]);
 
+  const router = useRouter();
+  const ref = useRef<SwiperRef>(null);
+
+  const [step, setStep] = useState("");
   const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
   const [username, setUsername] = useState("");
   const [usernameChecker, setUsernameChecker] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // const web3ApiToken = process.env.NEXT_PUBLIC_WEB3_API_TOKEN as string;
+
+  const apiToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDdiREVlNjRmQWY5RmJGOEQ3QTM2MzAyNjY5QkY0OTE0MEJmMDFlZTkiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTY0NjI3MDg5ODEsIm5hbWUiOiJidW5jaCJ9.OwG3jsLnWHWRR_FtnUEwQHyHzzBr1KRo1HVbikiyrb8";
+
+  const client = new Web3Storage({ token: apiToken });
+  const [file, setFile] = useState("");
+
+  async function handleUpload(file: File) {
+    await sleep(3000);
+
+    console.log(document.getElementById("input").files[0]);
+    var fileInput = document.getElementById("input");
+
+    const rootCid = await client.put(fileInput.files, {
+      name: "avatar",
+      maxRetries: 3,
+    });
+
+    console.log(rootCid);
+
+    const res = await client.get(rootCid);
+    const files = await res.files();
+    console.log(files);
+    const url = URL.createObjectURL(files[0]);
+    console.log(url);
+    setFile(url);
+
+    return {
+      url: url,
+    };
+  }
+
   const handleNameChange = (value) => {
     setName(value);
   };
+  const handleBioChange = (value) => {
+    setBio(value);
+  };
+
   const handleUsernameChange = (value) => {
     setUsername(value);
   };
@@ -42,6 +101,8 @@ export default function Register(props) {
   const onFinish = async () => {
     const data = {
       name: name,
+      bio: bio,
+      image: image,
       username: username,
       email: email,
       password: password,
@@ -62,6 +123,13 @@ export default function Register(props) {
       });
   };
 
+  const handleUploaded = (cid: any, ret: any) => {
+    console.log(cid, "handle uploaded:", ret);
+  };
+
+  const handleLoading = (val: boolean) => {
+    console.log("handle loading:", val);
+  };
   const checkExisting = async () => {
     const isTrue = await axios.post("/api/checkExisting", {
       query: { username },
@@ -78,77 +146,15 @@ export default function Register(props) {
     console.log(isTrue?.data?.result);
   };
 
+  const handleImageChange = (value) => {
+    setImage(value);
+
+    console.log("image", image);
+  };
+
   return (
     <>
       <Card>
-        <Form
-          name="form"
-          onFinish={onFinish}
-          footer={
-            <Button block type="submit" color="primary" size="large">
-              Submit
-            </Button>
-          }
-        >
-          <Form.Header>Register</Form.Header>
-          <Form.Item
-          // extra={
-          //   <a type="submit" onClick={checkExisting} color="primary">
-          //     Check Availability
-          //   </a>
-          // }
-          >
-            <Input
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleUsernameChange}
-              placeholder="username"
-            />
-          </Form.Item>
-          <p>{usernameChecker}</p>
-          <Form.Item
-            rules={[{ required: true }]}
-            label="name"
-            help="please type your name : John Doe "
-          >
-            <Input
-              type="text"
-              value={name}
-              onChange={handleNameChange}
-              placeholder="name"
-            />
-          </Form.Item>
-
-          <Form.Item
-            rules={[{ required: true }]}
-            label="email"
-            help="please type your email address "
-          >
-            <Input
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              placeholder="email"
-            />
-          </Form.Item>
-          <Form.Item
-            rules={[{ required: true }]}
-            label="password"
-            help="please type "
-          >
-            <Input
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-              placeholder="password"
-            />
-          </Form.Item>
-        </Form>
-
-        <Divider />
-      </Card>
-      {/* <Card>
         <Steps current={step}>
           <Step title="1" description="username" />
 
@@ -156,18 +162,11 @@ export default function Register(props) {
           <Step title="3" description="profile" />
         </Steps>
         <Space direction="vertical" block>
-          <Form
-            name="form"
-            onFinish={onFinish}
-            footer={
-              <Button block type="submit" color="primary" size="large">
-                Submit
-              </Button>
-            }
-          >
+          <Form name="form" onFinish={onFinish}>
             <Swiper allowTouchMove={false} ref={ref}>
               <Swiper.Item key={1}>
                 <Form.Header>Register</Form.Header>
+
                 <Form.Item
                   extra={
                     <Popover
@@ -242,6 +241,55 @@ export default function Register(props) {
                       placeholder="name"
                     />
                   </Form.Item>
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    label="bio"
+                    help="write a cool bio about you "
+                  >
+                    <TextArea
+                      value={bio}
+                      onChange={handleBioChange}
+                      placeholder="name"
+                    />
+                  </Form.Item>
+
+                  <>
+                    <div className="App">
+                      <img alt="image" src={file} />
+
+                      <div>
+                        <label>Choose file to upload</label>
+                        <input type="file" id="input" name="file" multiple />
+                      </div>
+                      <div>
+                        <button onClick={handleUpload}>Submit</button>
+                      </div>
+                    </div>
+                    <ImageUploader
+                      value={image}
+                      onChange={handleImageChange}
+                      upload={handleUpload}
+                    >
+                      <div
+                        style={{
+                          width: 80,
+                          height: 80,
+                          borderRadius: 40,
+                          backgroundColor: "#f5f5f5",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "#999999",
+                        }}
+                      >
+                        <PictureOutline style={{ fontSize: 32 }} />
+                      </div>
+                    </ImageUploader>
+                  </>
+
+                  <Button block type="submit" color="primary" size="large">
+                    Submit
+                  </Button>
                 </div>
               </Swiper.Item>
             </Swiper>
@@ -267,7 +315,7 @@ export default function Register(props) {
         </Space>
 
         <Divider />
-      </Card> */}
+      </Card>
     </>
   );
 }

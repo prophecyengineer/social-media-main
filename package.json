@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@0xflair/ipfs": "^0.65.1",
+    "@0xflair/react-ipfs": "^0.65.1",
     "@nextui-org/react": "^1.0.0-beta.9",
     "@prisma/client": "^4.0.0",
     "@semi-bot/semi-theme-nyx-c": "^1.0.6",
@@ -23,9 +25,12 @@
     "react-activity-feed": "^1.4.0",
     "react-dom": "18.2.0",
     "react-inlinesvg": "^3.0.0",
+    "react-ipfs-uploader": "^1.2.6",
     "react-responsive": "^9.0.0-beta.10",
     "rjv": "^5.0.0-alpha.9",
-    "rjv-react": "^5.0.0-alpha.20"
+    "rjv-react": "^5.0.0-alpha.20",
+    "web3-uploader": "^0.0.4",
+    "web3.storage": "^4.3.0"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
