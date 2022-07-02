@@ -71,11 +71,9 @@ const Home: NextPage = () => {
         <Space align="center" direction="vertical">
           <div className="spacer-large" />
           <h1 className={styles.title}>Bunch</h1>
-          <div className="spacer-small" />
-          <p> Yet another social media 🙄</p>
-          <p> this time a bit cooler</p>
-          <div className="spacer-medium" />
-          <Link href="/register">
+
+          <div className="spacer-large"></div>
+          <Link href="/signup">
             <Button
               className={styles.button}
               size="large"
