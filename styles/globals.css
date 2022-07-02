@@ -1,32 +1,46 @@
 @import url("https://fonts.googleapis.com/css?family=Inter&display=swap");
 
 :root:root {
-  --adm-color-primary: #1677ff;
-  --adm-color-default: #668ec6;
+  --adm-color-primary: #7f5af0;
+  --adm-color-secondary: #72757e;
+  --adm-color-tertiary: #2cb67d;
+  --adm-color-default: #fffffe;
   --adm-color-success: #00b578;
   --adm-color-warning: #ff8f1f;
   --adm-color-danger: #ff3141;
   --adm-color-white: #ffffff;
-  --adm-color-text: #ffff;
+  --adm-color-text: #fffffe;
   --adm-color-text-secondary: #666666;
   --adm-color-weak: #999999;
   --adm-color-light: #cccccc;
   --adm-color-border: #eeeeee;
   --adm-color-box: #f5f5f5;
-  --adm-color-background: #060606;
+  --adm-color-background: #242629;
   --adm-avatar-border-radius: 60px;
   --adm-font-size-main: var(--adm-font-size-5);
-
   --adm-font-family: "Inter";
 }
 
+.input {
+  background-color: #1b1c26;
+}
+
+.subheadline {
+  color: #94a1b2;
+}
+
+.heading {
+  color: #fffffe;
+}
+
 .adm-card {
-  background: rgba(24, 24, 24, 0.725) !important;
+  color: #94a1b2;
+  background: #16161a;
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid #464752;
 }
 
 html {
@@ -47,7 +61,7 @@ html {
 
 .raf-activity {
   border: solid rgba(255, 255, 255, 0.283) 1px;
-  background-color: black !important;
+  background-color: #16161a !important;
   font-family: var(--adm-font-family);
   color: white;
 }
@@ -57,4 +71,20 @@ html {
   background-color: black !important;
   font-family: var(--adm-font-family);
   color: white;
+}
+
+.draggable {
+  margin-bottom: -70px !important;
+  background-color: whitesmoke;
+  position: sticky !important;
+  bottom: 0 !important;
+  color: #94a1b2;
+  margin-bottom: -60px;
+  overflow: hidden;
+  background-color: #16161abb !important;
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  border: 1px solid #464752;
 }

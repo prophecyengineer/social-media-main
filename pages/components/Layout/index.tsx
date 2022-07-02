@@ -1,7 +1,8 @@
+import ThumbMenu from "./ThumbMenu";
 import { useMediaQuery } from "react-responsive";
 import router, { useRouter } from "next/router";
 import { AppOutline } from "antd-mobile-icons";
-import styles from "./Navbar.module.css";
+import styles from "./Layout.module.css";
 import { signOut, useSession } from "next-auth/react";
 import {
   NavBar,
@@ -10,20 +11,15 @@ import {
   Space,
   Avatar,
   Grid,
-  Button,
-  Card,
-  Tabs,
-  Dropdown,
   ActionSheet,
   FloatingBubble,
+  Button,
   Popup,
 } from "antd-mobile";
 import {
-  LocationOutline,
-  GlobalOutline,
-  BellOutline,
-  UserCircleOutline,
   AddCircleOutline,
+  SearchOutline,
+  MessageOutline,
 } from "antd-mobile-icons";
 import type {
   Action,
@@ -31,6 +27,7 @@ import type {
 } from "antd-mobile/es/components/action-sheet";
 import { useState, useEffect } from "react";
 import MakePost from "../MakePost";
+import Head from "next/head";
 
 export default function Layout(props) {
   const session = useSession();
@@ -41,41 +38,6 @@ export default function Layout(props) {
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
   // const client = stream.connect(apiKey, userToken, appId);
-
-  const MakePostBubble = () => {
-    const [visible, setVisible] = useState(false);
-    const onClick = () => {
-      setVisible(true);
-    };
-    return (
-      <div>
-        <FloatingBubble
-          style={{
-            "--initial-position-bottom": "94px",
-            "--initial-position-right": "24px",
-            "--edge-distance": "24px",
-          }}
-          onClick={onClick}
-        >
-          <AddCircleOutline font-size={72} />
-        </FloatingBubble>
-        <Popup
-          visible={visible}
-          onMaskClick={() => {
-            setVisible(false);
-          }}
-          bodyStyle={{ height: "60vh" }}
-        >
-          <MakePost />
-        </Popup>
-      </div>
-    );
-  };
-
-  const { pathname } = location;
-  const setRouteActive = (value: string) => {
-    router.push(value);
-  };
 
   useEffect(() => {
     setMounted(true);
@@ -99,28 +61,29 @@ export default function Layout(props) {
   ];
   const [visible, setVisible] = useState(false);
 
-  const left = (
-    <>
-      <Avatar onClick={() => setVisible(true)} src=""></Avatar>
-
-      <ActionSheet
-        visible={visible}
-        actions={actions}
-        onClose={() => setVisible(false)}
-      />
-    </>
-  );
-
   //button to open slider
 
+  const back = () =>
+    Toast.show({
+      content: "go back a page",
+      duration: 1000,
+    });
   const right = (
     <div style={{ fontSize: 24 }}>
-      <Space style={{ "--gap": "16px" }}></Space>
+      <Space style={{ "--gap": "16px" }}>
+        {" "}
+        <MessageOutline />
+      </Space>
     </div>
   );
 
   return (
     <div>
+      <Head>
+        <title>My page title</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <script src="https://unpkg.com/input-knob"></script>
+      </Head>
       {mounted && (
         <div>
           <Desktop>
@@ -129,41 +92,22 @@ export default function Layout(props) {
         </div>
       )}
 
-      <MakePostBubble />
-      <NavBar
-        className={styles.top}
-        right={right}
-        back={left}
-        backArrow={false}
-      ></NavBar>
+      <NavBar right={right} onBack={back}>
+        <>
+          <Button size="small" onClick={() => setVisible(true)} src="">
+            {session?.data?.user?.username}
+          </Button>
 
-      {props.children}
-      <div className={styles.thumb}>
-        <Card>
-          <TabBar
-            activeKey={pathname}
-            onChange={(value) => setRouteActive(value)}
-          >
-            <TabBar.Item key="/home" icon={<LocationOutline />} title="home" />
-            <TabBar.Item
-              key="/explore"
-              icon={<GlobalOutline />}
-              title="explore"
-            />
-            <TabBar.Item
-              key="/notification"
-              icon={<BellOutline />}
-              title="notifications"
-              badge={99}
-            />
-            <TabBar.Item
-              key="/profile"
-              icon={<UserCircleOutline />}
-              title="profile"
-            />
-          </TabBar>
-        </Card>
-      </div>
+          <ActionSheet
+            visible={visible}
+            actions={actions}
+            onClose={() => setVisible(false)}
+          />
+        </>
+      </NavBar>
+
+      {/* {props.children} */}
+      <ThumbMenu />
     </div>
   );
 }

@@ -17,6 +17,8 @@
     "antd-mobile": "^5.15.1",
     "bcrypt": "^5.0.1",
     "cookie": "^0.5.0",
+    "gsap": "^3.10.4",
+    "input-knob": "^0.0.11",
     "magic-sdk": "^8.1.1",
     "next": "12.1.6",
     "next-auth": "^4.5.0",
@@ -24,13 +26,17 @@
     "react": "18.2.0",
     "react-activity-feed": "^1.4.0",
     "react-dom": "18.2.0",
+    "react-gsap": "^3.2.1",
     "react-inlinesvg": "^3.0.0",
     "react-ipfs-uploader": "^1.2.6",
     "react-responsive": "^9.0.0-beta.10",
+    "react-rotary-knob": "^1.1.8",
+    "react-rotate-menu": "^0.2.4",
     "rjv": "^5.0.0-alpha.9",
     "rjv-react": "^5.0.0-alpha.20",
     "web3-uploader": "^0.0.4",
-    "web3.storage": "^4.3.0"
+    "web3.storage": "^4.3.0",
+    "wheelnav": "^1.7.1"
   },
   "devDependencies": {
     "@types/node": "18.0.0",

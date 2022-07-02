@@ -10,6 +10,9 @@ const nextConfig = withTM({
       "placekitten.com",
       "picsum.photos",
     ],
+    build: {
+      transpile: ["gsap"],
+    },
   },
 });
 

@@ -1,0 +1,42 @@
+.top {
+  position: sticky;
+  top: 0;
+
+  border-radius: 5px;
+}
+
+.swiper {
+  height: 150px !important;
+}
+
+.swiperitem {
+  border-radius: 40px !important;
+  height: 150px !important;
+}
+
+.thumb {
+  /* position: sticky !important; */
+  bottom: 0 !important;
+
+  overflow: hidden !important;
+  align-items: center !important;
+  overflow: hidden;
+  color: #94a1b2;
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #16161abb !important;
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  border: 1px solid #464752;
+  width: 90vw !important;
+}
+
+.thumbbar {
+  /* width: 100vw !important; */
+  /* align-items: center !important; */
+  bottom: 0 !important;
+  position: fixed;
+}
