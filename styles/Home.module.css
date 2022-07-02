@@ -2,6 +2,11 @@
   padding: 0 2rem;
 }
 
+.button {
+  width: 90vw !important;
+  border-radius: 30px;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;
@@ -28,21 +33,16 @@
   flex-grow: 1;
 }
 
-.title a {
-  color: #0070f3;
+.title {
+  font-weight: bold !important;
   text-decoration: none;
+  font-size: 4rem;
 }
 
 .title a:hover,
 .title a:focus,
 .title a:active {
   text-decoration: underline;
-}
-
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
 }
 
 .title,

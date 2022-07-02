@@ -1,23 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
-import styles from "../styles/Home.module.css";
-import {
-  Form,
-  Input,
-  Button,
-  Dialog,
-  NavBar,
-  AutoCenter,
-  Space,
-} from "antd-mobile";
+import { Form, Input, Button, Dialog, NavBar } from "antd-mobile";
 import { redirect } from "next/dist/server/api-utils";
 
-const Home: NextPage = () => {
+const Signin: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -67,39 +59,48 @@ const Home: NextPage = () => {
   // };
   return (
     <>
-      <AutoCenter>
-        <Space align="center" direction="vertical">
-          <div className="spacer-large" />
-          <h1 className={styles.title}>Bunch</h1>
-          <div className="spacer-small" />
-          <p> Yet another social media 🙄</p>
-          <p> this time a bit cooler</p>
-          <div className="spacer-medium" />
-          <Link href="/register">
-            <Button
-              className={styles.button}
-              size="large"
-              color="primary"
-              block
-            >
-              Sign up
-            </Button>
-          </Link>
-          <div className="spacer-small" />
-          <Link href="/signin">
-            <Button
-              className={styles.button}
-              size="large"
-              color="success"
-              block
-            >
-              Log in
-            </Button>
-          </Link>
-        </Space>
-      </AutoCenter>
+      <NavBar />
+      <Form
+        name="form"
+        onFinish={onFinish}
+        footer={
+          <Button block type="submit" color="primary" size="large">
+            Submit
+          </Button>
+        }
+      >
+        <Form.Header>Sign In</Form.Header>
+
+        <Form.Item
+          rules={[{ required: true }]}
+          name="username"
+          label="username"
+          help="please type "
+        >
+          <Input
+            type="text"
+            value={username}
+            onChange={handleUsernameChange}
+            placeholder="username"
+          />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true }]}
+          name="password"
+          label="password"
+          help="please type "
+        >
+          <Input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            placeholder="password"
+          />
+        </Form.Item>
+      </Form>
+      <Link href="/register">New here? Register</Link>
     </>
   );
 };
 
-export default Home;
+export default Signin;

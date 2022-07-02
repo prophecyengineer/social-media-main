@@ -2,11 +2,11 @@ import { useSession } from "next-auth/react";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const UserStateContext = createContext({
-  name: "Bob",
-  username: "bobberson",
-  bio: "heyhye bio made by me",
+  name: "Jane",
+  username: "Doe",
+  bio: "a first bio",
   isActive: 1,
-  email: "bobbobberson@example.com",
+  email: "jane@example.com",
 });
 
 export function UserProvider({ children }) {

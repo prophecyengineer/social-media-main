@@ -1,7 +1,6 @@
 import ThumbMenu from "./ThumbMenu";
 import { useMediaQuery } from "react-responsive";
 import router, { useRouter } from "next/router";
-import { AppOutline } from "antd-mobile-icons";
 import styles from "./Layout.module.css";
 import { signOut, useSession } from "next-auth/react";
 import {
@@ -15,6 +14,7 @@ import {
   FloatingBubble,
   Button,
   Popup,
+  AutoCenter,
 } from "antd-mobile";
 import {
   AddCircleOutline,
@@ -26,7 +26,6 @@ import type {
   ActionSheetShowHandler,
 } from "antd-mobile/es/components/action-sheet";
 import { useState, useEffect } from "react";
-import MakePost from "../MakePost";
 import Head from "next/head";
 
 export default function Layout(props) {
@@ -38,7 +37,6 @@ export default function Layout(props) {
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
   // const client = stream.connect(apiKey, userToken, appId);
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -92,7 +90,7 @@ export default function Layout(props) {
         </div>
       )}
 
-      <NavBar right={right} onBack={back}>
+      <NavBar right={right} onBack={back} className={styles.top}>
         <>
           <Button size="small" onClick={() => setVisible(true)} src="">
             {session?.data?.user?.username}
@@ -106,7 +104,7 @@ export default function Layout(props) {
         </>
       </NavBar>
 
-      {/* {props.children} */}
+      {props.children}
       <ThumbMenu />
     </div>
   );

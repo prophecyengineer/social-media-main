@@ -20,7 +20,8 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/components/Wrapper",
-    "pages/components/utils"
+    "pages/components/utils",
+    "pages/components/Layout/Dial.jsx"
   ],
   "exclude": ["node_modules"]
 }

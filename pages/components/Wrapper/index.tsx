@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../Layout";
+import { UserProvider } from "../../../context/user";
 
 export default function Wrapper(props) {
   const session = useSession();
@@ -11,6 +12,7 @@ export default function Wrapper(props) {
   if (
     session === null ||
     router.pathname === "/" ||
+    router.pathname === "/signin" ||
     router.pathname === "/register"
   ) {
     return <>{props.children}</>;
@@ -21,7 +23,9 @@ export default function Wrapper(props) {
   ) {
     return (
       <>
-        <Layout>{props.children}</Layout>
+        <UserProvider>
+          <Layout>{props.children}</Layout>
+        </UserProvider>
       </>
     );
   }

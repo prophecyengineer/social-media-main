@@ -52,7 +52,6 @@ const Profile: NextPage = (props) => {
   const [bio, setBio] = useState([]);
   const [image, setImage] = useState([]);
   const { user } = useUserState();
-  console.log("user", user);
   const session = useSession();
   console.log("session", session);
 

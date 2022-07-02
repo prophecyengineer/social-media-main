@@ -21,6 +21,17 @@
   --adm-font-family: "Inter";
 }
 
+.spacer-large {
+  height: 100px;
+}
+.spacer-medium {
+  height: 70px;
+}
+
+.spacer-small {
+  height: 10px;
+}
+
 .input {
   background-color: #1b1c26;
 }
@@ -31,6 +42,11 @@
 
 .heading {
   color: #fffffe;
+}
+
+p {
+  font-size: 17px;
+  line-height: 0;
 }
 
 .adm-card {
