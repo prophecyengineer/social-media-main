@@ -13,6 +13,7 @@ export default function Wrapper(props) {
     session === null ||
     router.pathname === "/" ||
     router.pathname === "/signin" ||
+    router.pathname === "/signup/Username" ||
     router.pathname === "/signup"
   ) {
     return <>{props.children}</>;

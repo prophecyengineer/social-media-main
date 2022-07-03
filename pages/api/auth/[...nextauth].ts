@@ -33,7 +33,7 @@ const configuration = {
         try {
           const user = await prisma.user.findFirst({
             where: {
-              username: credentials.username,
+              email: credentials.email,
             },
           });
 

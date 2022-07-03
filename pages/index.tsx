@@ -68,9 +68,9 @@ const Home: NextPage = () => {
   return (
     <>
       <AutoCenter>
-        <Space align="center" direction="vertical">
+        <Space align="center" wrap direction="vertical">
           <div className="spacer-large" />
-          <h1 className={styles.title}>Bunch</h1>
+          <h1 className={styles.logo}>Bunch</h1>
 
           <div className="spacer-large"></div>
           <Link href="/signup">
@@ -83,7 +83,7 @@ const Home: NextPage = () => {
               Sign up
             </Button>
           </Link>
-          <div className="spacer-small" />
+
           <Link href="/signin">
             <Button
               className={styles.button}

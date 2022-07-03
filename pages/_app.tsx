@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SessionProvider, useSession } from "next-auth/react";
 import Wrapper from "./components/Wrapper/index";
+import "antd/dist/antd.dark.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   console.log("got pageProps.session", pageProps.session);

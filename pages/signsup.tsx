@@ -3,10 +3,21 @@ import Link from "next/link";
 import { useState, useRef } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
+import { prisma, PrismaClient } from "@prisma/client";
+import { PictureOutline } from "antd-mobile-icons";
+import { SwiperRef } from "antd-mobile/es/components/swiper";
+const { Step } = Steps;
+import { sleep } from "antd-mobile/es/utils/sleep";
+import { Web3Storage } from "web3.storage";
+import { useStepsForm } from "sunflower-antd";
+import styles from "../styles/Home.module.css";
+import { CheckCircleFill } from "antd-mobile-icons";
 import {
   Form,
   Input,
   Button,
+  Result,
   Dialog,
   Space,
   Card,
@@ -21,22 +32,35 @@ import {
   AutoCenter,
   NavBar,
 } from "antd-mobile";
-import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
-import { prisma, PrismaClient } from "@prisma/client";
-import { PictureOutline } from "antd-mobile-icons";
-import { SwiperRef } from "antd-mobile/es/components/swiper";
-const axios = require("axios").default;
-const { Step } = Steps;
-import { sleep } from "antd-mobile/es/utils/sleep";
-import { Web3Storage } from "web3.storage";
-import styles from "../styles/Home.module.css";
+import { NextPage } from "next";
 
-export async function mockUploadFail() {
-  await sleep(3000);
-  throw new Error("Fail to upload");
-}
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
-export default function Signup(props) {
+const Signup: NextPage = () => {
+  const {
+    form,
+    current,
+    gotoStep,
+    stepsProps,
+    formProps,
+    submit,
+    formLoading,
+  } = useStepsForm({
+    async submit(values) {
+      const { username, email, address } = values;
+      console.log(username, email, address);
+      await new Promise((r) => setTimeout(r, 1000));
+      return "ok";
+    },
+    total: 3,
+  });
+
   const router = useRouter();
   const ref = useRef<SwiperRef>(null);
 
@@ -45,8 +69,6 @@ export default function Signup(props) {
   const [bio, setBio] = useState("");
   const [username, setUsername] = useState("");
   const [usernameChecker, setUsernameChecker] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   // const web3ApiToken = process.env.NEXT_PUBLIC_WEB3_API_TOKEN as string;
 
@@ -97,38 +119,6 @@ export default function Signup(props) {
     setUsername(value);
   };
 
-  const handleEmailChange = (value) => {
-    setEmail(value);
-  };
-  const handlePasswordChange = (value) => {
-    setPassword(value);
-  };
-
-  const onFinish = async () => {
-    const data = {
-      name: name,
-      bio: bio,
-      image: image,
-      username: username,
-      email: email,
-      password: password,
-    };
-
-    await axios.post("/api/register", data);
-    signIn("credentials", {
-      username,
-      password,
-      callbackUrl: `${window.location.origin}/home`,
-      redirect: false,
-    })
-      .then(function (result) {
-        router.push(result.url);
-      })
-      .catch((err) => {
-        alert("Failed to register: " + err.toString());
-      });
-  };
-
   const handleUploaded = (cid: any, ret: any) => {
     console.log(cid, "handle uploaded:", ret);
   };
@@ -152,24 +142,131 @@ export default function Signup(props) {
     console.log(isTrue?.data?.result);
   };
 
-  const back = () => {
-    ref.current?.swipePrev();
-    setStep(step - 1);
-  };
+  const formList = [
+    <>
+      <Form.Item
+        layout="horizontal"
+        name="username"
+        rules={[
+          {
+            required: true,
+            message: "Please input a cool username",
+          },
+        ]}
+        extra={
+          <div>
+            <a>check availability</a>
+          </div>
+        }
+      >
+        <Input placeholder="username" />
+      </Form.Item>
 
-  const next1 = () => {};
+      <Form.Item {...tailLayout}>
+        <Button color="primary" block onClick={() => gotoStep(current + 1)}>
+          Next
+        </Button>
+      </Form.Item>
+    </>,
+    <>
+      <Form.Item
+        label="email"
+        name="email"
+        rules={[
+          {
+            required: true,
+            message: "Please input your email",
+          },
+        ]}
+      >
+        <Input placeholder="email" />
+      </Form.Item>
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[
+          {
+            required: true,
+            message: "Please input address",
+          },
+        ]}
+      >
+        <Input placeholder="Password" />
+      </Form.Item>
+      <Form.Item {...tailLayout}>
+        <Button
+          style={{ marginRight: 10 }}
+          type="primary"
+          loading={formLoading}
+          onClick={() => {
+            submit().then((result) => {
+              if (result === "ok") {
+                gotoStep(current + 1);
+              }
+            });
+          }}
+        >
+          Submit
+        </Button>
+        <Button onClick={() => gotoStep(current - 1)}>Prev</Button>
+      </Form.Item>
+    </>,
+  ];
 
   return (
-    <>
-      <NavBar onBack={back}></NavBar>
-      <div className="spacer-small" />
-      {/* <Steps current={step}>
-        <Step />
-        <Step />
-        <Step />
-      </Steps> */}
+    <div>
+      <div style={{ marginTop: 60 }}>
+        <AutoCenter>
+          <h1 className={styles.title}>Choose a username</h1>
+        </AutoCenter>
+        <div className="spacer-medium"></div>
+        <Form {...layout} {...formProps} style={{ maxWidth: 600 }}>
+          {formList[current]}
+        </Form>
 
-      <Form name="form" onFinish={onFinish}>
+        {current === 2 && (
+          <Result
+            status="success"
+            title="Submit is succeed!"
+            extra={
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    router.push("./Oboarding");
+                  }}
+                >
+                  Buy it again
+                </Button>
+                <Button>Check detail</Button>
+              </>
+            }
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
+
+//   const next1 = () => {};
+
+//   return (
+//     <>
+//
+//       <div className="spacer-small" />
+
+{
+  /* <Steps current={step}>
+        <Step />
+        <Step />
+        <Step />
+      </Steps> */
+}
+
+{
+  /* <Form name="form" onFinish={onFinish}>
         <Swiper allowTouchMove={true} ref={ref}>
           <Swiper.Item key={1}>
             <AutoCenter>
@@ -207,30 +304,7 @@ export default function Signup(props) {
                 Toast.show(`this one's been taken`);
               }}
             >
-              <Form.Item
-                rules={[{ required: true }]}
-                label="email"
-                help="please type your email address "
-              >
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  placeholder="email"
-                />
-              </Form.Item>
-              <Form.Item
-                rules={[{ required: true }]}
-                label="password"
-                help="please type "
-              >
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  placeholder="password"
-                />
-              </Form.Item>
+            
             </div>
           </Swiper.Item>
 
@@ -285,9 +359,11 @@ export default function Signup(props) {
             </div>
           </Swiper.Item>
         </Swiper>
-      </Form>
+      </Form> */
+}
 
-      <AutoCenter>
+{
+  /* <AutoCenter>
         <Button
           style={{
             marginBottom: "24px",
@@ -305,9 +381,10 @@ export default function Signup(props) {
         >
           Next
         </Button>
-      </AutoCenter>
-
-      <Divider />
-    </>
-  );
+      </AutoCenter> */
 }
+
+//       <Divider />
+//     </>
+//   );
+// }

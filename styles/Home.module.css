@@ -48,9 +48,8 @@
 }
 
 .title {
-  font-weight: bold !important;
-  text-decoration: none;
-  font-size: 4rem;
+  font-size: 2.5rem;
+  line-height: 0.9;
 }
 
 .title a:hover,
@@ -119,8 +118,9 @@
 }
 
 .logo {
-  height: 1em;
-  margin-left: 0.5rem;
+  font-weight: bold !important;
+  text-decoration: none;
+  font-size: 4rem;
 }
 
 @media (max-width: 600px) {
