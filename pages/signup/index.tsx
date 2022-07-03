@@ -90,7 +90,6 @@ const Signup: NextPage = (props) => {
       >
         <Form.Item
           rules={[{ required: true }]}
-          label="email"
           help="please type your email address "
         >
           <Input
@@ -100,11 +99,7 @@ const Signup: NextPage = (props) => {
             placeholder="email"
           />
         </Form.Item>
-        <Form.Item
-          rules={[{ required: true }]}
-          label="password"
-          help="please type "
-        >
+        <Form.Item rules={[{ required: true }]}>
           <Input
             type="password"
             value={password}

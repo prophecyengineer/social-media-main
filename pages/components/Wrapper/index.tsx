@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../Layout";
 import { UserProvider } from "../../../context/user";
+import { AutoCenter, Space } from "antd-mobile";
 
 export default function Wrapper(props) {
   const session = useSession();
@@ -13,8 +14,9 @@ export default function Wrapper(props) {
     session === null ||
     router.pathname === "/" ||
     router.pathname === "/signin" ||
+    router.pathname === "/signup" ||
     router.pathname === "/signup/Username" ||
-    router.pathname === "/signup"
+    router.pathname === "/signup/Profile"
   ) {
     return <>{props.children}</>;
   }
@@ -37,9 +39,14 @@ export default function Wrapper(props) {
   {
     return (
       <>
-        <h1>You are not authenticated</h1>
-
-        <Link href="/">Back to Login</Link>
+        <AutoCenter>
+          <Space direction="vertical">
+            <h1>You are not authenticated</h1>
+            <h2>
+              <Link href="/">Back to safety</Link>
+            </h2>
+          </Space>
+        </AutoCenter>
       </>
     );
   }

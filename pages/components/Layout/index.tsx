@@ -32,11 +32,7 @@ export default function Layout(props) {
   const session = useSession();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const stream = require("getstream");
-  const userToken = session.data?.user?.userToken;
-  const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
-  const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
-  // const client = stream.connect(apiKey, userToken, appId);
+
   useEffect(() => {
     setMounted(true);
   }, []);
