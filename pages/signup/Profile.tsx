@@ -33,7 +33,6 @@ export default function Profile() {
   const [file, setFile] = useState("");
   const [image, setImage] = useState("");
 
-  console.log("outside image", image);
   const handleNameChange = (value) => {
     setName(value);
   };

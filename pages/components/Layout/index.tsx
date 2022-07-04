@@ -57,11 +57,6 @@ export default function Layout(props) {
 
   //button to open slider
 
-  const back = () =>
-    Toast.show({
-      content: "go back a page",
-      duration: 1000,
-    });
   const right = (
     <div style={{ fontSize: 24 }}>
       <Space style={{ "--gap": "16px" }}>
@@ -86,7 +81,7 @@ export default function Layout(props) {
         </div>
       )}
 
-      <NavBar right={right} onBack={back} className={styles.top}>
+      <NavBar right={right} backArrow={false} className={styles.top}>
         <>
           <Button size="small" onClick={() => setVisible(true)} src="">
             {session?.data?.user?.username}

@@ -16,7 +16,8 @@ const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
 export default async (req, res) => {
   if (req.method === "POST") {
     const { username, name, bio, image } = req.body;
-
+    client.user(username).update({ name: name, bio: bio, image: image });
+    console.log("did the getstream bit");
     try {
       await prisma.user.update({
         where: {
@@ -30,9 +31,7 @@ export default async (req, res) => {
       });
 
       console.log("created in db");
-      client.user(username).update({ name: name, bio: bio, image: image });
 
-      console.log("did the getstream bit");
       return res.status(200).end();
     } catch (err) {
       return res.status(503).json({ err: err.toString() });

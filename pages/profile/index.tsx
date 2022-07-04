@@ -24,6 +24,7 @@ import {
   Divider,
   FloatingPanel,
   CapsuleTabs,
+  Mask,
 } from "antd-mobile";
 import { MoreOutline } from "antd-mobile-icons";
 import "react-activity-feed/dist/index.css";
@@ -299,86 +300,63 @@ const Profile: NextPage = (props) => {
                     <Button
                       block
                       onClick={() => {
-                        // editProfile();
-                        setVisible(true);
+                        editProfile();
                       }}
                     >
                       Edit
                     </Button>
-                    <Modal
-                      visible={visible}
-                      content={
-                        <Form
-                          name="form"
-                          onFinish={onFinish}
-                          footer={
-                            <Button
-                              block
-                              type="submit"
-                              color="primary"
-                              size="large"
-                            >
-                              update profile
-                            </Button>
-                          }
-                        >
-                          <Form.Header>Edit Profile</Form.Header>
-
-                          <Form.Item
-                            name="name"
-                            label="name"
-                            help="please type your name : John Doe "
-                          >
-                            <Input
-                              type="text"
-                              value={name}
-                              onChange={handleNameChange}
-                              placeholder="name"
-                            />
-                          </Form.Item>
-
-                          <Form.Item
-                            name="bio"
-                            label="bio"
-                            help="please type your bio"
-                          >
-                            <Input
-                              type="text"
-                              value={bio}
-                              onChange={handleBioChange}
-                              placeholder="bio"
-                            />
-                          </Form.Item>
-                          <Form.Item
-                            name="image"
-                            label="image"
-                            help="please paste your img"
-                          >
-                            <Input
-                              type="text"
-                              value={image}
-                              onChange={handleImageChange}
-                              placeholder="paste an image link"
-                            />
-                          </Form.Item>
-                        </Form>
-                      }
-                      closeOnAction
-                      onClose={() => {
-                        setVisible(false);
-                      }}
-                      actions={[
-                        {
-                          key: "confirm",
-                          text: "confirm",
-                        },
-                      ]}
-                    />
                   </>
                 ) : (
-                  <Button block type="submit" color="primary" size="large">
-                    update profile other buttoon
-                  </Button>
+                  <h1>hey im here</h1>
+                  // <Form
+                  //   name="form"
+                  //   onFinish={onFinish}
+                  //   footer={
+                  //     <Button block type="submit" color="primary" size="large">
+                  //       update profile
+                  //     </Button>
+                  //   }
+                  // >
+                  //   <Form.Header>Edit Profile</Form.Header>
+
+                  //   <Form.Item
+                  //     name="name"
+                  //     label="name"
+                  //     help="please type your name : John Doe "
+                  //   >
+                  //     <Input
+                  //       type="text"
+                  //       value={name}
+                  //       onChange={handleNameChange}
+                  //       placeholder="name"
+                  //     />
+                  //   </Form.Item>
+
+                  //   <Form.Item
+                  //     name="bio"
+                  //     label="bio"
+                  //     help="please type your bio"
+                  //   >
+                  //     <Input
+                  //       type="text"
+                  //       value={bio}
+                  //       onChange={handleBioChange}
+                  //       placeholder="bio"
+                  //     />
+                  //   </Form.Item>
+                  //   <Form.Item
+                  //     name="image"
+                  //     label="image"
+                  //     help="please paste your img"
+                  //   >
+                  //     <Input
+                  //       type="text"
+                  //       value={image}
+                  //       onChange={handleImageChange}
+                  //       placeholder="paste an image link"
+                  //     />
+                  //   </Form.Item>
+                  // </Form>
                 )}
               </Card>
 
@@ -464,10 +442,85 @@ const Profile: NextPage = (props) => {
                   </StreamApp>
                 </Tabs.Tab>
                 <Tabs.Tab title="Private Feed" key="2">
-                  2
-                </Tabs.Tab>
-                <Tabs.Tab title="Videos" key="3">
-                  3
+                  <div className={styles.private} />
+                  <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
+                    <FlatFeed
+                      notify
+                      feedGroup="private"
+                      Activity={(props) => {
+                        let activity;
+                        if (props.activity?.actor?.data) {
+                          activity = {
+                            activity: {
+                              //give
+                              ...props.activity,
+                              actor: {
+                                data: {
+                                  name: props.activity.actor.data.name,
+                                },
+                              },
+                            },
+                          } as ActivityProps;
+                        }
+
+                        return (
+                          <Activity
+                            {...props}
+                            // data={{ name: props.activity.actor.data.id }}
+                            activity={activity?.activity || props.activity}
+                            Header={() => (
+                              <>
+                                <List>
+                                  <List.Item
+                                    key="1"
+                                    extra={
+                                      <Button
+                                        onClick={async () => {
+                                          const username = user.id;
+                                          const client = stream.connect(
+                                            apiKey,
+                                            userToken,
+                                            appId
+                                          );
+
+                                          const feed = client.feed(
+                                            "private",
+                                            username
+                                          );
+
+                                          const removed =
+                                            await feed.removeActivity(
+                                              props.activity.id
+                                            );
+                                          console.log("removed", removed);
+                                        }}
+                                      >
+                                        <MoreOutline />
+                                      </Button>
+                                    }
+                                    prefix={
+                                      <Avatar
+                                        src={props.activity.actor.data.image}
+                                      />
+                                    }
+                                    description={props.activity.actor.id}
+                                  >
+                                    {props.activity.actor.data.name}
+                                  </List.Item>
+                                </List>
+                              </>
+                            )}
+                            Footer={() => (
+                              <div style={{ padding: "8px 16px" }}>
+                                <LikeButton {...props} />
+                                <CommentList activityId={props.activity.id} />
+                              </div>
+                            )}
+                          />
+                        );
+                      }}
+                    />
+                  </StreamApp>
                 </Tabs.Tab>
               </Tabs>
             </>
