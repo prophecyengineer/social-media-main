@@ -19,7 +19,8 @@ const axios = require("axios").default;
 
 //here we take the username, auth the user and send them off to next steps to building their profile, adding the info to db as we go.
 
-const Signup: NextPage = (props) => {
+const Email = () => {
+  const username = localStorage.getItem("username");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleEmailChange = (value) => {
@@ -30,33 +31,17 @@ const Signup: NextPage = (props) => {
   };
 
   const onFinish = async () => {
-    // const onFinish = async () => {
-    //   const data = {
-    //     name: name,
-    //     bio: bio,
-    //     image: image,
-    //     username: username,
-    //     email: email,
-    //     password: password,
-    //   };
-
     const data = {
       email: email,
       password: password,
+      username: username,
     };
 
-    function createItem() {
-      localStorage.setItem("email", data.email);
-    }
-    createItem();
-
-    await axios.post("/api/signup-email", data);
-    console.log("data", data);
-
+    await axios.post("/api/auth/signup/signup-email", data);
     signIn("credentials", {
-      email,
+      username,
       password,
-      callbackUrl: `${window.location.origin}/signup/Username`,
+      callbackUrl: `${window.location.origin}/signup/Profile`,
       redirect: false,
     })
       .then(function (result) {
@@ -112,4 +97,4 @@ const Signup: NextPage = (props) => {
   );
 };
 
-export default Signup;
+export default Email;

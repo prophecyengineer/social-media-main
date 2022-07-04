@@ -9,46 +9,30 @@ const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 //     process.env.REACT_APP_STREAM_APP_SECRET,
 //     process.env.REACT_APP_STREAM_APP_ID,
 //     { location: 'us-east' },
-
-// const client = connect(apiKey, appId, apiSecret);
-
 let stream = require("getstream");
-
-// connect to the us-east region
 const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
   if (req.method === "POST") {
-    const { username, email, password } = req.body;
+    const { username, name, bio, image } = req.body;
 
     try {
-      // makes a user in getstream
-
-      // console.log('username', name, username)
-      let userToken = client.createUserToken(username);
-
-      console.log("make a stream token with", username, userToken);
-
-      const hash = await bcrypt.hash(password, 0);
-      console.log("getting this far");
-      await prisma.user.create({
-        data: {
-          name: "Jane Doe",
+      await prisma.user.update({
+        where: {
           username: username,
-          email: email,
-          password: hash,
-          userToken: userToken,
-          bio: "Something cool",
-          image: "ss",
-          stripeToken: "",
+        },
+        data: {
+          bio: bio,
+          image: image,
+          name: name,
         },
       });
 
-      // const newclient = stream.connect(apiKey, userToken, appId, { location: "dublin" });
+      console.log("created in db");
+      client.user(username).update({ name: name, bio: bio, image: image });
 
-      // ensure the user data is stored on Stream
-
+      console.log("did the getstream bit");
       return res.status(200).end();
     } catch (err) {
       return res.status(503).json({ err: err.toString() });

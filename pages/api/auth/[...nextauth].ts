@@ -33,7 +33,7 @@ const configuration = {
         try {
           const user = await prisma.user.findFirst({
             where: {
-              email: credentials.email,
+              username: credentials.username,
             },
           });
 
@@ -85,8 +85,6 @@ const configuration = {
     signIn: "/", //Need to define custom login page (if using)
   },
 };
-
-
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (

@@ -16,6 +16,7 @@ import {
   Space,
 } from "antd-mobile";
 import { redirect } from "next/dist/server/api-utils";
+import Username from "./signup/Username";
 
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
@@ -71,31 +72,19 @@ const Home: NextPage = () => {
         <Space align="center" wrap direction="vertical">
           <div className="spacer-large" />
           <h1 className={styles.logo}>Bunch</h1>
-
-          <div className="spacer-large"></div>
-          <Link href="/signup">
-            <Button
-              className={styles.button}
-              size="large"
-              color="primary"
-              block
-            >
-              Sign up
-            </Button>
-          </Link>
-
-          <Link href="/signin">
-            <Button
-              className={styles.button}
-              size="large"
-              color="success"
-              block
-            >
-              Log in
-            </Button>
-          </Link>
         </Space>
       </AutoCenter>
+
+      <Username />
+
+      <AutoCenter>
+        <Link href="/signin">
+          <Button className={styles.button} size="large" block>
+            Log in
+          </Button>
+        </Link>
+      </AutoCenter>
+      {/* </Space> */}
     </>
   );
 };

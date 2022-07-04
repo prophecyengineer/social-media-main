@@ -1,37 +1,42 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
+import { connect } from "getstream";
 
-function makeRandomString() {
-  const length = 9;
-  let text = "";
-  const possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < length; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
+const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
+const apiSecret = process.env.REACT_APP_STREAM_APP_SECRET as string;
+const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
+//     process.env.REACT_APP_STREAM_APP_SECRET,
+//     process.env.REACT_APP_STREAM_APP_ID,
+//     { location: 'us-east' },
+let stream = require("getstream");
+const client = stream.connect(apiKey, apiSecret, { location: "dublin" });
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
   if (req.method === "POST") {
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
-    const randomUsername = `u` + makeRandomString();
     try {
       const hash = await bcrypt.hash(password, 0);
+
+      let userToken = client.createUserToken(username);
+      console.log("make a stream token with", username, userToken);
 
       await prisma.user.create({
         data: {
           email: email,
           password: hash,
-          name: "Jane Doe",
-          username: randomUsername,
-          userToken: "not added yet",
+          username: username,
+          name: "Anonymous",
+          userToken: userToken,
           bio: "A bio about me",
           image: "http://placekitten.com/200/300",
           stripeToken: "",
         },
       });
-      console.log("created in db");
+
+      console.log("did the getstream bit");
       return res.status(200).end();
     } catch (err) {
       return res.status(503).json({ err: err.toString() });

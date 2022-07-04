@@ -14,7 +14,7 @@ export default function Wrapper(props) {
     session === null ||
     router.pathname === "/" ||
     router.pathname === "/signin" ||
-    router.pathname === "/signup" ||
+    router.pathname === "/signup/Email" ||
     router.pathname === "/signup/Username" ||
     router.pathname === "/signup/Profile"
   ) {

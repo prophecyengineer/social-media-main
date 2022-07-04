@@ -13,6 +13,7 @@ import {
 import styles from "../../styles/Home.module.css";
 import router from "next/router";
 import { useEffect, useState, useRef } from "react";
+
 import debounce from "lodash.debounce";
 const axios = require("axios").default;
 
@@ -76,58 +77,40 @@ export default function Username() {
   };
 
   const onFinish = async () => {
-    function getItem() {
-      localStorage.getItem("email");
-    }
-    console.log("got local email", getItem());
-
+    localStorage.setItem("username", username);
+    // console.log(email);
     // const data = {
     //   email: email,
     //   username: username,
     // };
-
-    // await axios.post("/api/signup-email", data);
+    // await axios.post("/api/auth/signup/signup-username", data);
     // console.log("data", data);
-    // router.push("/signup/profile");
-  };
-
-  const back = () => {
-    router.push("/signup");
+    router.push("/signup/Email");
   };
 
   return (
-    <>
-      <NavBar onBack={back}></NavBar>
-      <div className="spacer-small" />
-
-      <h2 className={styles.title}>Choose a username</h2>
-
-      <p className={styles.description}> </p>
-      <Form
-        name="form"
-        onFinish={onFinish}
-        footer={
-          <>
-            <div />
-            <div className="spacer-small" />
-            <Button block type="submit" color="primary" size="large">
-              sumbit
-            </Button>
-          </>
-        }
-      >
-        <Form.Item>
-          <Input
-            type="text"
-            name="username"
-            value={username}
-            onChange={handleUsernameChange}
-            placeholder="username"
-          />
-        </Form.Item>
-
-        <div></div>
-      </Form>
-    </>
+    <Form
+      name="form"
+      onFinish={onFinish}
+      footer={
+        <>
+          <div />
+          <div className="spacer-small" />
+          <Button block type="submit" color="primary" size="large">
+            reserve username
+          </Button>
+        </>
+      }
+    >
+      <Form.Item>
+        <Input
+          type="text"
+          name="username"
+          value={username}
+          onChange={handleUsernameChange}
+          placeholder="username"
+        />
+      </Form.Item>
+    </Form>
   );
 }

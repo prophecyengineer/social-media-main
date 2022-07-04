@@ -7,8 +7,8 @@ import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { prisma, PrismaClient } from "@prisma/client";
 import { PictureOutline } from "antd-mobile-icons";
 import { SwiperRef } from "antd-mobile/es/components/swiper";
+const axios = require("axios").default;
 const { Step } = Steps;
-import { sleep } from "antd-mobile/es/utils/sleep";
 import { Web3Storage } from "web3.storage";
 import { useStepsForm } from "sunflower-antd";
 import styles from "../styles/Home.module.css";
@@ -69,6 +69,8 @@ const Signup: NextPage = () => {
   const [bio, setBio] = useState("");
   const [username, setUsername] = useState("");
   const [usernameChecker, setUsernameChecker] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // const web3ApiToken = process.env.NEXT_PUBLIC_WEB3_API_TOKEN as string;
 
@@ -119,6 +121,38 @@ const Signup: NextPage = () => {
     setUsername(value);
   };
 
+  const handleEmailChange = (value) => {
+    setEmail(value);
+  };
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+  };
+
+  const onFinish = async () => {
+    const data = {
+      name: name,
+      bio: bio,
+      image: image,
+      username: username,
+      email: email,
+      password: password,
+    };
+
+    await axios.post("/api/register", data);
+    signIn("credentials", {
+      username,
+      password,
+      callbackUrl: `${window.location.origin}/home`,
+      redirect: false,
+    })
+      .then(function (result) {
+        router.push(result.url);
+      })
+      .catch((err) => {
+        alert("Failed to register: " + err.toString());
+      });
+  };
+
   const handleUploaded = (cid: any, ret: any) => {
     console.log(cid, "handle uploaded:", ret);
   };
@@ -140,6 +174,10 @@ const Signup: NextPage = () => {
       setUsernameChecker("this username is free to use");
     }
     console.log(isTrue?.data?.result);
+  };
+
+  const back = () => {
+    router.push("/");
   };
 
   const formList = [
@@ -215,6 +253,14 @@ const Signup: NextPage = () => {
 
   return (
     <div>
+      <NavBar onBack={back}>
+        <Steps {...stepsProps}>
+          <Step />
+          <Step />
+          <Step />
+        </Steps>
+      </NavBar>
+
       <div style={{ marginTop: 60 }}>
         <AutoCenter>
           <h1 className={styles.title}>Choose a username</h1>
@@ -304,7 +350,30 @@ export default Signup;
                 Toast.show(`this one's been taken`);
               }}
             >
-            
+              <Form.Item
+                rules={[{ required: true }]}
+                label="email"
+                help="please type your email address "
+              >
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  placeholder="email"
+                />
+              </Form.Item>
+              <Form.Item
+                rules={[{ required: true }]}
+                label="password"
+                help="please type "
+              >
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  placeholder="password"
+                />
+              </Form.Item>
             </div>
           </Swiper.Item>
 
