@@ -60,7 +60,6 @@ export default function Layout(props) {
   const right = (
     <div style={{ fontSize: 24 }}>
       <Space style={{ "--gap": "16px" }}>
-        {" "}
         <MessageOutline />
       </Space>
     </div>
@@ -81,7 +80,7 @@ export default function Layout(props) {
         </div>
       )}
 
-      <NavBar right={right} backArrow={false} className={styles.top}>
+      {/* <NavBar right={right} backArrow={false} className={styles.top}>
         <>
           <Button size="small" onClick={() => setVisible(true)} src="">
             {session?.data?.user?.username}
@@ -93,7 +92,7 @@ export default function Layout(props) {
             onClose={() => setVisible(false)}
           />
         </>
-      </NavBar>
+      </NavBar> */}
 
       {props.children}
       <ThumbMenu />

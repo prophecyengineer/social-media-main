@@ -42,7 +42,6 @@
 
 p {
   font-size: 17px;
-  line-height: 0;
 }
 
 /* .buttonbottom {
@@ -107,6 +106,15 @@ html {
   border: 1px solid #464752;
 }
 
+.inputimage {
+  background-color: rgba(255, 0, 0, 0);
+  width: 400px;
+  margin-left: -50%;
+  height: 150px;
+  position: fixed;
+  top: 0;
+  margin-top: 50px;
+}
 .adm-step-icon-container {
   border-radius: 40px !important;
 }

@@ -6,7 +6,7 @@
   width: 90vw !important;
   z-index: 1;
   background-color: #16161abb !important;
-  border-radius: 16px;
+  border-radius: 15px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;
@@ -28,7 +28,6 @@
 
 .thumb {
   z-index: 1;
-
   position: fixed !important;
   bottom: 0 !important;
   overflow: hidden !important;
@@ -37,9 +36,9 @@
   color: #94a1b2;
   height: 40px;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   background-color: #16161abb !important;
-  border-radius: 16px;
+  border-radius: 15px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px) !important;
   -webkit-backdrop-filter: blur(5px) !important;

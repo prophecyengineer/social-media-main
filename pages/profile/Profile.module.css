@@ -3,14 +3,20 @@
 }
 
 .avatar {
-  margin-top: -85px;
+  margin-bottom: 10px;
+  border: solid white 3px;
 }
 
 .title {
   margin-bottom: -20px;
+  font-weight: bolder;
 }
 
-.hero {
+.userDetails {
+  padding-top: 70px;
+}
+
+/* .hero {
   max-height: 170px;
   overflow: hidden;
   width: 120%;
@@ -32,7 +38,7 @@
   width: 100vw;
   overflow: hidden;
   align-items: center;
-}
+} */
 
 .smallButton {
   font-size: 13px !important;
@@ -45,14 +51,11 @@
 }
 
 .private {
-  height: 350px;
+  height: 300px;
   z-index: 1;
-
   bottom: 0 !important;
   z-index: 1;
-
   position: fixed !important;
-
   overflow: hidden !important;
 
   color: #94a1b2;

@@ -21,6 +21,7 @@ const axios = require("axios").default;
 
 const Email = () => {
   const username = localStorage.getItem("username");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleEmailChange = (value) => {

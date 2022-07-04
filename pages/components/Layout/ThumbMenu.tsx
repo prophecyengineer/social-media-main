@@ -44,7 +44,7 @@ const ThumbMenu = () => {
         <FloatingBubble
           style={{
             "--initial-position-bottom": "94px",
-            "--initial-position-right": "20px",
+            "--initial-position-right": "15px",
             "--edge-distance": "30px",
           }}
           onClick={onClick}

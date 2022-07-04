@@ -25,8 +25,11 @@ import {
   FloatingPanel,
   CapsuleTabs,
   Mask,
+  FloatingBubble,
+  AutoCenter,
+  TextArea,
 } from "antd-mobile";
-import { MoreOutline } from "antd-mobile-icons";
+import { MoreOutline, EditFill } from "antd-mobile-icons";
 import "react-activity-feed/dist/index.css";
 import {
   StreamApp,
@@ -53,8 +56,32 @@ const Profile: NextPage = (props) => {
   const [bio, setBio] = useState([]);
   const [image, setImage] = useState([]);
   const { user } = useUserState();
+  const [file, setFile] = useState("");
   const session = useSession();
   console.log("session", session);
+
+  async function handleUpload(file: File) {
+    const imageData = document.getElementById("input").files[0].name;
+
+    var fileInput = document.getElementById("input");
+
+    const rootCid = await client.put(fileInput.files, {
+      name: "avatar",
+      maxRetries: 3,
+    });
+
+    setFile(rootCid);
+    console.log("rootCID", rootCid);
+
+    await setImage(
+      "https://" + `${rootCid}` + ".ipfs.dweb.link/" + `${imageData}`
+    );
+
+    console.log("full res");
+    console.log("full image", image);
+
+    return { image };
+  }
 
   const handleNameChange = (value: React.SetStateAction<never[]>) => {
     setName(value);
@@ -64,9 +91,6 @@ const Profile: NextPage = (props) => {
     setBio(value);
   };
 
-  const handleImageChange = (value: React.SetStateAction<never[]>) => {
-    setImage(value);
-  };
   // function to to change fields to be editable
   const editProfile = () => {
     setReadOnlyEditState(false);
@@ -90,12 +114,6 @@ const Profile: NextPage = (props) => {
     // console.log("values from form", data);
 
     await axios.post("/api/userUpdateProfile", data);
-    // signIn("credentials", {
-    //   username,
-    //   password,
-    //   callbackUrl: `${window.location.origin}/home`,
-    //   redirect: false,
-    // })
   };
 
   const stream = require("getstream");
@@ -176,18 +194,22 @@ const Profile: NextPage = (props) => {
   return (
     <>
       <div className={styles.container}>
+        <FloatingBubble
+          style={{
+            "--initial-position-bottom": "154px",
+            "--initial-position-right": "14px",
+            "--edge-distance": "24px",
+          }}
+          onClick={() => {
+            saveProfile();
+          }}
+        >
+          <EditFill fontSize={32} />
+        </FloatingBubble>
         <main className={styles.main}>
           {readOnlyEditState ? (
             <>
-              <Space justify="center" block className={styles.heroWrapper} wrap>
-                <Image
-                  className={styles.hero}
-                  src="https://picsum.photos/400/600"
-                  fit="contain"
-                  alt="hero"
-                ></Image>
-              </Space>
-              <Space block justify="center">
+              <Space className={styles.userDetails} block justify="center">
                 <Avatar
                   className={styles.avatar}
                   src={user?.data?.image}
@@ -525,7 +547,76 @@ const Profile: NextPage = (props) => {
               </Tabs>
             </>
           ) : (
-            <h1>hi</h1>
+            <>
+              <div className={styles.userDetails} block justify="center">
+                <Form name="form" onFinish={onFinish}>
+                  <div>
+                    <div className="spacer-medium"></div>
+                    <AutoCenter>
+                      <Avatar
+                        className={styles.avatar}
+                        src={image}
+                        onClick={() => {}}
+                        style={{ "--size": "120px" }}
+                      ></Avatar>
+                    </AutoCenter>
+                    <div>
+                      <AutoCenter>
+                        <input
+                          className="inputimage"
+                          type="file"
+                          id="input"
+                          name="file"
+                          multiple
+                        />
+                      </AutoCenter>
+                    </div>
+                  </div>
+                  <div className="spacer-medium"></div>
+
+                  <Button
+                    size="large"
+                    block
+                    onClick={() => {
+                      handleUpload();
+                    }}
+                  >
+                    upload image
+                  </Button>
+                  <div className="spacer-medium"></div>
+
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    label="name"
+                    help="please type your name : John Doe "
+                  >
+                    <Input
+                      type="text"
+                      value={name}
+                      onChange={handleNameChange}
+                      placeholder="Elon Musk"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    label="bio"
+                    help="write a cool bio about you "
+                  >
+                    <TextArea
+                      value={bio}
+                      onChange={handleBioChange}
+                      placeholder="I am a human I like to do human things 🌍 👽"
+                    />
+                  </Form.Item>
+
+                  <></>
+
+                  <Button block type="submit" color="primary" size="large">
+                    Submit
+                  </Button>
+                </Form>
+              </div>
+            </>
           )}
         </main>
       </div>
